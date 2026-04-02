@@ -117,6 +117,27 @@ if [ -f "${SETUP_DIR}/project-root-CLAUDE.md" ]; then
   echo "  ✓ ~/CLAUDE.md restored"
 fi
 
+# ── Restore PM Skills (65 from phuryn/pm-skills) ──────────────────
+echo "→ Restoring PM skills..."
+pm_count=0
+if command -v gh &>/dev/null; then
+  PM_TMP=$(mktemp -d)
+  gh repo clone phuryn/pm-skills "${PM_TMP}" -- --depth 1 2>/dev/null || true
+  if [ -d "${PM_TMP}" ]; then
+    for plugin_dir in "${PM_TMP}"/pm-*/; do
+      [ -d "${plugin_dir}/skills" ] || continue
+      for skill_dir in "${plugin_dir}"/skills/*/; do
+        skill_name="pm-$(basename "${skill_dir}")"
+        mkdir -p "${CLAUDE_HOME}/skills/${skill_name}"
+        cp "${skill_dir}/SKILL.md" "${CLAUDE_HOME}/skills/${skill_name}/SKILL.md"
+        pm_count=$((pm_count + 1))
+      done
+    done
+    rm -rf "${PM_TMP}"
+  fi
+fi
+echo "  ✓ ${pm_count} PM skills restored"
+
 # ── Restore Scripts ────────────────────────────────────────────────
 echo "→ Restoring utility scripts..."
 if [ -d "${SETUP_DIR}/scripts" ]; then
@@ -134,10 +155,11 @@ echo "╔═══════════════════════�
 echo "║  Restore Complete                         ║"
 echo "╚═══════════════════════════════════════════╝"
 echo ""
-echo "  Agents:  ${agent_count}"
-echo "  Hooks:   ${hook_count}"
-echo "  Rules:   ${rule_count}"
-echo "  Memory:  ${mem_count}"
+echo "  Agents:    ${agent_count}"
+echo "  Hooks:     ${hook_count}"
+echo "  Rules:     ${rule_count}"
+echo "  Memory:    ${mem_count}"
+echo "  PM Skills: ${pm_count}"
 echo ""
 echo "── Next Steps ──────────────────────────────"
 echo ""

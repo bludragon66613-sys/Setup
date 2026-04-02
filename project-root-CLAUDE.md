@@ -28,13 +28,14 @@ Standalone version of the dashboard, deployed on Vercel.
 ### claudecodemem
 Backup repo for agents and memory. Always push here after changes.
 - **Repo**: github.com/bludragon66613-sys/claudecodemem
-- **Contents**: `agents/` (4 Claude agents), `memory/` (session memory)
+- **Contents**: `agents/` (5 Claude agents), `memory/` (session memory)
 
 ## Available Agents
 These are globally installed in `~/.claude/agents/` and available in every session:
 
 | Agent | Trigger | Purpose |
 |-------|---------|---------|
+| `product-manager` | Product planning, PRDs, strategy, discovery, GTM, growth | Google-caliber PM with 65 skills across 8 workflows |
 | `agent-architect-builder` | User wants to design/build an AI agent from scratch | 10-phase discovery → spec → build → deploy |
 | `ui-ux-architect` | Design audit, UI polish, visual inconsistencies | Reads design docs, phases improvements, never touches logic |
 | `senior-software-engineer` | Non-trivial code, refactors, debugging | Surfaces assumptions, pushes back, surgical scope |
@@ -50,13 +51,25 @@ node -e "
 const { execSync } = require('child_process');
 const fs = require('fs');
 const os = require('os');
-const agents = ['agent-architect-builder','ui-ux-architect','senior-software-engineer','technical-cofounder'];
+const agents = ['product-manager','agent-architect-builder','ui-ux-architect','senior-software-engineer','technical-cofounder'];
 for (const a of agents) {
   const content = execSync(\`gh api repos/bludragon66613-sys/claudecodemem/contents/agents/\${a}.md --jq '.content'\`).toString().trim();
   fs.writeFileSync(\`\${os.homedir()}/.claude/agents/\${a}.md\`, Buffer.from(content, 'base64').toString());
   console.log('restored', a);
 }
 "
+```
+
+**After a PC reset — restore PM skills (65 skills from phuryn/pm-skills):**
+```bash
+gh repo clone phuryn/pm-skills /tmp/pm-skills 2>/dev/null
+for d in /tmp/pm-skills/pm-*/skills/*/; do
+  name="pm-$(basename "$d")"
+  mkdir -p ~/.claude/skills/"$name"
+  cp "$d/SKILL.md" ~/.claude/skills/"$name"/SKILL.md
+  echo "restored $name"
+done
+rm -rf /tmp/pm-skills
 ```
 
 ## OpenClaw (Telegram AI Bot)
