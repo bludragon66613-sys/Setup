@@ -14,6 +14,8 @@
 - [project_rei.md](project_rei.md) — Rei AI VTuber + Solana token launcher (~/companion/), forked from AIRI
 - [project_paperclip.md](project_paperclip.md) — Paperclip AI: open-source agent orchestration platform at ~/paperclip
 - [project_tallyai.md](project_tallyai.md) — TallyAI: AI accounting intelligence for Indian SMEs, Tally XML parser + dashboard
+- [project_omc.md](project_omc.md) — oh-my-claudecode v4.9.3: multi-agent orchestration, smart model routing, autopilot/ralph modes
+- [project_autoagent.md](project_autoagent.md) — AutoAgent: autonomous agent/skill improvement loop at ~/autoagent (from kevinrgu/autoagent)
 
 ## Session Savepoints (latest 5 — older ones in _archive/)
 - `~/.claude/sessions/2026-03-27-tallyai-auth-fix-session.tmp` — TallyAI auth fix: disabled auth for MVP, tabs now work on production
@@ -28,6 +30,7 @@
 
 ## Reference
 - [reference_cc_source_architecture.md](reference_cc_source_architecture.md) — CC source architecture: hooks (5 types), memory, coordinator, plugins, context mgmt
+- [reference_marketing_skills.md](reference_marketing_skills.md) — 11 AI marketing skills from ericosiu/ai-marketing-skills: growth, sales, content, SEO, finance, outbound, podcasts
 
 ## Feedback
 - [feedback_model_selection.md](feedback_model_selection.md) — Use Sonnet by default, Opus only for complex coding/reasoning

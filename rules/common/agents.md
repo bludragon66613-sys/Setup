@@ -24,6 +24,9 @@ No user prompt needed:
 2. Code just written/modified - Use **code-reviewer** agent
 3. Bug fix or new feature - Use **tdd-guide** agent
 4. Architectural decision - Use **architect** agent
+5. Any UI/frontend work - Use Impeccable skills (`/teach-impeccable` → `/audit` → `/arrange` → `/typeset` → `/colorize` → `/polish`)
+6. Design audit or UI polish - Use **ui-ux-architect** agent (has Impeccable + Pencil MCP built in)
+7. Working with `.pen` files - Use Pencil MCP tools (`mcp__pencil__*`), NEVER Read/Grep
 
 ## Parallel Task Execution
 

@@ -43,25 +43,61 @@ AI layer that works WITH Tally (not a replacement). Ingests Tally XML exports + 
 - **Key decisions:** Drop Fraunces serif, drop paper texture/ruled lines, drop warm cream background, evolve stamps to flat badges, add gradient accent line + AI sparkle indicator
 - **Competitor research:** doola.com (warm gold, casual voice) and QuickBooks (protected green, "Backing You") analyzed for positioning
 
-## Build Status (Phase 1 — Week 1)
-- [x] Next.js 16 scaffolded with TypeScript + Tailwind
-- [x] shadcn/ui components (button, card) + dark theme
-- [x] Tally XML parser (tested with sample data)
-- [x] Database schema (Drizzle ORM, 8 tables)
-- [x] Neon Postgres via Vercel Marketplace (neon-gray-mountain)
-- [x] Import API + DB persistence
-- [x] Bank statement CSV parser (HDFC, SBI, ICICI, generic)
-- [x] Reconciliation engine (fuzzy matching, confidence scoring)
-- [x] Natural language query engine (9 intents, Hindi/English)
-- [x] Full dashboard: tabbed UI (Import, Bank, Reconcile, Ask)
-- [x] Company selector (multi-company support)
-- [x] E2E tested: import → bank → reconcile → query all working
-- [x] Vercel project linked (bludragon66613-sys-projects/tallyai)
-- [x] Brand Master Guide v2.0 (Munshi Neo) — positioning, visual identity, image prompts
-- [ ] WhatsApp bot integration (Phase 2)
-- [ ] AI Gateway for NL queries (needs vercel env pull for OIDC)
+## Build Status — Superpowers Expansion
+All 4 phases of the Superpowers expansion are complete and pushed to GitHub.
+
+### Phase 0: Database Schema Expansion — DONE
+- [x] 12 new tables added (users, orgs, compliance, chat, autopilot, reports)
+
+### Phase 1: Auth & Multi-tenancy — DONE
+- [x] Clerk auth infrastructure (sign-in/sign-up, webhooks, RBAC)
+
+### Phase 2a: Compliance Engines — DONE
+- [x] E-invoice engine (IRP payload generation, sandbox)
+- [x] E-way bill engine (NIC format, validity tracking)
+- [x] GSTR preparation engine (GSTR-1, GSTR-3B JSON generation)
+- [x] Compliance Hub page (/compliance) with 4 tabs
+
+### Phase 2b: Exports & Reports — DONE
+- [x] PDF + Excel generation via @react-pdf/renderer and ExcelJS
+- [x] 12 report templates (trial-balance, P&L, BS, GST, GSTR-1/3B, HSN, TDS, stock, bank recon, compliance calendar, outstanding)
+- [x] ExportButton component wired into all module views
+
+### Phase 2c: Chat SDK — DONE
+- [x] WhatsApp, Telegram, Web adapters with unified MessageRouter
+- [x] Chat history API
+
+### Phase 3: Munshi AI Agent — DONE (2026-04-02)
+- [x] Agent core (`src/lib/agent/munshi.ts`) with AI SDK v6 tool loop
+- [x] 6 tools: queryDatabase, generateEInvoice, prepareGSTReturn, generateReport, checkComplianceCalendar, analyzeTrends
+- [x] Model selection: Haiku for simple queries, Sonnet for complex/autopilot
+- [x] Bilingual personality system (Hindi/English)
+- [x] Conversation memory (chat_messages table)
+- [x] Autopilot rule engine with schedule/event/threshold triggers
+- [x] Default rules: GSTR-1 reminder, monthly report, overdue receivables alert
+- [x] Cron: every 6 hours via Vercel
+- [x] API routes: /api/agent/chat, /api/agent/autopilot/run, /api/agent/autopilot/rules
+- [x] Agent dashboard UI (/agent) with chat, autopilot config, activity log
+- [x] Agent link in app header
+
+### Remaining — Launch TODO
 - [ ] Deploy to Vercel production
-- [ ] Implement Munshi Neo design system (CSS migration from v1 to v2)
+- [ ] Set CRON_SECRET env var for autopilot endpoint
+- [ ] WhatsApp Business API verification (Meta approval pending)
+- [ ] Production IRP/NIC API credentials (sandbox only currently)
+- [ ] Replace placeholder URLs in GTM materials (munshi.ai, wa.me/91XXXXXXXXXX, calendly.com/munshi-ai-ca-demo, ca@munshi.ai, chapters@munshi.ai)
+- [ ] Register domain (munshi.ai or tallyai.in) and build landing page
+- [ ] Replace placeholder testimonials with real beta user quotes
+- [ ] Start CA outreach — founding partner cohort (first 50 CAs)
+- [ ] Run Launch Checklist P0 gate (`~/tallyai/gtm/LAUNCH_CHECKLIST.md` Section 6)
+
+## GTM Strategy
+- Full GTM document: `~/tallyai/gtm/GTM_STRATEGY.md`
+- Beachhead: digitally-aware CAs in Tier-1/2 cities managing 10-30 Tally clients
+- 3 phases: Seed (M1-2), CA-Led Growth (M3-6), Scale (M7-12)
+- North Star: Weekly Active Companies (WAC)
+- Y1 target: 1,000 paying companies, ₹60L ARR
+- CA Plan conversion is the critical bet: 1 CA = 15-40 SME businesses
 
 ## Pricing Model
 - Free: 1 company, 500 vouchers/month, 10 queries/day
