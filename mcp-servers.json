@@ -1,0 +1,39 @@
+{
+  "description": "MCP servers configured in ~/.claude.json — these provide tool access to Claude Code agents",
+  "servers": {
+    "gitnexus": {
+      "purpose": "Code intelligence knowledge graph — indexes repos into graph DB, exposes 16 MCP tools for dependency analysis, blast radius, symbol context, and Cypher queries",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\Rohan\\AppData\\Roaming\\npm\\node_modules\\gitnexus\\dist\\cli\\index.js",
+        "mcp"
+      ],
+      "type": "stdio",
+      "install": "npm install -g gitnexus",
+      "setup": "gitnexus analyze ~/aeon && gitnexus analyze ~/paperclip && gitnexus analyze ~/aeon/dashboard",
+      "tools": ["list_repos", "query", "context", "impact", "detect_changes", "rename", "cypher", "group_list", "group_sync", "group_contracts", "group_query", "group_status"],
+      "auto_approved": true
+    },
+    "qmd": {
+      "purpose": "Local semantic search engine — hybrid BM25 + vector search over markdown collections",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\Rohan\\AppData\\Roaming\\npm\\node_modules\\@tobilu\\qmd\\dist\\cli\\qmd.js",
+        "mcp"
+      ],
+      "install": "npm install -g @tobilu/qmd",
+      "setup": "qmd collection add vault ~/vault && qmd embed"
+    },
+    "pencil": {
+      "purpose": "Design tool integration for .pen files",
+      "command": "C:\\Users\\Rohan\\AppData\\Local\\Programs\\Pencil\\resources\\app.asar.unpacked\\out\\mcp-server-windows-x64.exe",
+      "args": ["--app", "desktop"],
+      "auto_approved": true
+    },
+    "claude-peers": {
+      "purpose": "Multi-instance Claude coordination",
+      "url": "http://localhost:7355/mcp"
+    }
+  },
+  "restore_note": "Copy the servers object into ~/.claude.json under 'mcpServers' key. Paths are Windows-specific."
+}

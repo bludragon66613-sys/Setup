@@ -43,42 +43,45 @@ AI layer that works WITH Tally (not a replacement). Ingests Tally XML exports + 
 - **Key decisions:** Drop Fraunces serif, drop paper texture/ruled lines, drop warm cream background, evolve stamps to flat badges, add gradient accent line + AI sparkle indicator
 - **Competitor research:** doola.com (warm gold, casual voice) and QuickBooks (protected green, "Backing You") analyzed for positioning
 
-## Build Status — Superpowers Expansion
-All 4 phases of the Superpowers expansion are complete and pushed to GitHub.
+## Build Status — TallyAI v2 Full Accounting Platform
+All 6 build phases complete as of 2026-04-04. Pushed to GitHub.
 
-### Phase 0: Database Schema Expansion — DONE
-- [x] 12 new tables added (users, orgs, compliance, chat, autopilot, reports)
+### Superpowers Expansion (Phases 0–3) — DONE
+- [x] 12 tables (users, orgs, compliance, chat, autopilot, reports)
+- [x] Clerk auth, multi-tenancy, RBAC
+- [x] E-invoice, e-way bill, GSTR engines
+- [x] 13 report templates (PDF + Excel) including Tax Invoice
+- [x] WhatsApp/Telegram/Web chat SDK
+- [x] Munshi AI Agent with 6 tools, autopilot rules, bilingual personality
 
-### Phase 1: Auth & Multi-tenancy — DONE
-- [x] Clerk auth infrastructure (sign-in/sign-up, webhooks, RBAC)
+### v2 Phase 1: Foundation — DONE
+- [x] Sidebar + ⌘K command bar, 5-level role hierarchy, company wizard, chart of accounts, notifications
 
-### Phase 2a: Compliance Engines — DONE
-- [x] E-invoice engine (IRP payload generation, sandbox)
-- [x] E-way bill engine (NIC format, validity tracking)
-- [x] GSTR preparation engine (GSTR-1, GSTR-3B JSON generation)
-- [x] Compliance Hub page (/compliance) with 4 tabs
+### v2 Phase 2: Core Accounting — DONE
+- [x] 8 transaction types (CRUD), voucher line items, ledger CRUD, approval workflow engine, numbering config
 
-### Phase 2b: Exports & Reports — DONE
-- [x] PDF + Excel generation via @react-pdf/renderer and ExcelJS
-- [x] 12 report templates (trial-balance, P&L, BS, GST, GSTR-1/3B, HSN, TDS, stock, bank recon, compliance calendar, outstanding)
-- [x] ExportButton component wired into all module views
+### v2 Phase 3: Compliance — DONE
+- [x] GST validation dashboard, GSTR-2B/3B reconciliation, e-invoice/e-way bill interactive UI, compliance calendar, filing workflow (7 tabs)
 
-### Phase 2c: Chat SDK — DONE
-- [x] WhatsApp, Telegram, Web adapters with unified MessageRouter
-- [x] Chat history API
+### v2 Phase 4: Governance — DONE (2026-04-04)
+- [x] 9 new tables + 11 enums (review meetings, attendance, leave, holidays, salary advances)
+- [x] Review meetings engine + API (CRUD with attendees, agenda, action items, auto-generated minutes)
+- [x] Attendance engine (mark/bulk, daily roster, member history, summary stats)
+- [x] Leave management (policies, balances, apply with balance validation)
+- [x] Salary advances (request→approve→disburse→EMI repayment)
+- [x] Real payroll engine (pro-rated salary, PF/ESI/PT, advance deductions)
+- [x] /reviews page (meeting list, detail, actions) and /payroll page (4 tabs: attendance/leave/advances/payroll)
 
-### Phase 3: Munshi AI Agent — DONE (2026-04-02)
-- [x] Agent core (`src/lib/agent/munshi.ts`) with AI SDK v6 tool loop
-- [x] 6 tools: queryDatabase, generateEInvoice, prepareGSTReturn, generateReport, checkComplianceCalendar, analyzeTrends
-- [x] Model selection: Haiku for simple queries, Sonnet for complex/autopilot
-- [x] Bilingual personality system (Hindi/English)
-- [x] Conversation memory (chat_messages table)
-- [x] Autopilot rule engine with schedule/event/threshold triggers
-- [x] Default rules: GSTR-1 reminder, monthly report, overdue receivables alert
-- [x] Cron: every 6 hours via Vercel
-- [x] API routes: /api/agent/chat, /api/agent/autopilot/run, /api/agent/autopilot/rules
-- [x] Agent dashboard UI (/agent) with chat, autopilot config, activity log
-- [x] Agent link in app header
+### v2 Phase 5: Company Secretary — DONE (2026-04-04)
+- [x] 5 tables + 6 enums (directors, share_register, board_resolutions, meeting_minutes, roc_filings)
+- [x] 16-function engine + 5 API routes under /api/roc/
+- [x] /roc page with 5 tabs: Directors, Share Register, Resolutions, Minutes, ROC Filings
+
+### v2 Phase 6: Polish — DONE (2026-04-04)
+- [x] Print-ready Tax Invoice PDF template (Indian GST format, HSN, amount in words)
+- [x] Enhanced ⌘K: dynamic search (ledgers/vouchers), recent items, Munshi AI query detection, keyboard shortcuts
+- [x] Floating Munshi assist panel (context-aware quick prompts, chat on any page)
+- [x] Mobile bottom navigation (5 tabs + More sheet), replaces hamburger menu
 
 ### Remaining — Launch TODO
 - [ ] Deploy to Vercel production

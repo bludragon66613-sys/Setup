@@ -29,11 +29,14 @@
 - `~/.claude/sessions/2026-03-24-nerv-desktop-session.tmp` — NERV Desktop app (Tauri+React). Brainstorm done, spec not written
 
 ## Reference
+- [reference_skill_graphs.md](reference_skill_graphs.md) — Skill graph architecture: 11 domain MOCs in _mocs/ connecting 285 skills via wikilinks (arscontexta pattern)
 - [reference_cc_source_architecture.md](reference_cc_source_architecture.md) — CC source architecture: hooks (5 types), memory, coordinator, plugins, context mgmt
 - [reference_marketing_skills.md](reference_marketing_skills.md) — 11 AI marketing skills from ericosiu/ai-marketing-skills: growth, sales, content, SEO, finance, outbound, podcasts
+- [reference_design_library.md](reference_design_library.md) — 54 brand DESIGN.md files at ~/.claude/design-references/ (awesome-design-md), design-reference skill
 
 ## Feedback
 - [feedback_model_selection.md](feedback_model_selection.md) — Use Sonnet by default, Opus only for complex coding/reasoning
 - [feedback_session_startup.md](feedback_session_startup.md) — Boot OpenClaw->Paperclip->Dashboard at every session start
 - [feedback_openclaw_startup.md](feedback_openclaw_startup.md) — OpenClaw restart pitfalls: zombie shells, duplicate gateway instances
 - [feedback_backup.md](feedback_backup.md) — Back up agents and memory to claudecodemem after significant changes
+- [feedback_design_quality.md](feedback_design_quality.md) — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality

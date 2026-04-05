@@ -110,6 +110,25 @@ done
 rm -rf /tmp/pm-skills
 ```
 
+**After a PC reset — restore skill graph MOCs (11 domain navigation maps):**
+```bash
+bash ~/claudecodemem/setup/restore-skill-graph.sh
+```
+
+**After a PC reset — restore rules:**
+```bash
+mkdir -p ~/.claude/rules/common
+cp ~/claudecodemem/rules/common/*.md ~/.claude/rules/common/
+cp ~/claudecodemem/rules/README.md ~/.claude/rules/ 2>/dev/null
+```
+
+**After a PC reset — install arscontexta plugin (knowledge graph builder):**
+```
+/plugin marketplace add agenticnotetaking/arscontexta
+/plugin install arscontexta@agenticnotetaking
+# restart Claude Code, then: /arscontexta:setup
+```
+
 ## OpenClaw (Telegram AI Bot)
 Local AI gateway that powers the Telegram bot (@kaneda6bot). Must be running at all times.
 - **Health check:** `bash ~/openclaw-healthcheck.sh` (auto-fixes common issues)
@@ -133,6 +152,15 @@ Dispatched to GitHub Actions via NERV terminal (`DISPATCH:{"skill":"<name>"}`):
 **BUILD:** article, digest, feature, code-health, changelog, build-skill
 
 **SYSTEM:** goal-tracker, skill-health, self-review, reflect, memory-flush, weekly-review, heartbeat, skill-eval, skill-evolve
+
+## GitNexus (Code Intelligence)
+Local knowledge graph engine indexing all repos via Tree-sitter AST parsing. Exposes 16 MCP tools.
+- **CLI**: `gitnexus` (v1.5.3, globally installed)
+- **MCP**: Configured in `~/.claude.json` (auto-approved in settings.json)
+- **Indexed repos**: aeon (1,002 nodes), paperclip (6,721 nodes), dashboard (524 nodes)
+- **Usage**: `gitnexus query "concept" --repo aeon` | `gitnexus impact "symbol" --repo aeon` | `gitnexus context "symbol" --repo aeon`
+- **Re-index after major changes**: `gitnexus analyze ~/aeon && gitnexus analyze ~/paperclip && gitnexus analyze ~/aeon/dashboard`
+- **MCP tools available in Claude Code**: query, context, impact, detect_changes, rename, cypher, list_repos
 
 ## Preferences
 - Always back up agents + memory to `claudecodemem` after significant changes

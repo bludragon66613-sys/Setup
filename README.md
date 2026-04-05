@@ -1,6 +1,6 @@
 # Claude Code Setup
 
-A complete, battle-tested Claude Code environment. 54 agents, 216 skills, 16 hooks, 65 rules across 13 languages, persistent memory system, and full configuration — ready to restore or fork.
+A complete, battle-tested Claude Code environment. 54 agents, 281 skills, 16 hooks, 65 rules across 13 languages, persistent memory system, 4 MCP servers, code intelligence via GitNexus, semantic search via QMD, and knowledge management via arscontexta — ready to restore or fork.
 
 ## Quick Start
 
@@ -91,13 +91,24 @@ Persistent cross-session memory in `memory/`:
 
 `settings.json` — Full Claude Code configuration:
 - Hook wiring (all events mapped)
-- Plugin enable/disable list (10 enabled)
-- Extra marketplaces (qmd)
+- Plugin enable/disable list (11 enabled)
+- Extra marketplaces (qmd, claude-mem, arscontexta)
 - Effort level: high
 - Voice enabled
 - Auto-updates: latest channel
 
-### Skills (216)
+### MCP Servers (4)
+
+See `mcp-servers.json`. Configured in `~/.claude.json`:
+
+| Server | Purpose | Install |
+|--------|---------|---------|
+| **gitnexus** | Code intelligence knowledge graph — indexes repos via Tree-sitter AST, exposes 16 tools (query, context, impact, rename, Cypher) | `npm i -g gitnexus` |
+| **qmd** | Local semantic search — hybrid BM25 + vector search over markdown collections | `npm i -g @tobilu/qmd` |
+| **pencil** | Design tool integration for .pen files | Desktop app |
+| **claude-peers** | Multi-instance Claude coordination | HTTP on :7355 |
+
+### Skills (281)
 
 Not included directly (installed via plugins). See `skills-manifest.json` for the full list.
 
@@ -107,7 +118,7 @@ Not included directly (installed via plugins). See `skills-manifest.json` for th
 /gsd:update             # Get Shit Done framework
 ```
 
-### Plugins (10 enabled)
+### Plugins (11 enabled)
 
 See `plugins-manifest.json`. Enabled:
 - `superpowers` — ECC skills framework
@@ -116,6 +127,7 @@ See `plugins-manifest.json`. Enabled:
 - `vercel` — Vercel platform skills
 - `claude-mem` — Persistent memory MCP
 - `qmd` — Local markdown search engine
+- `arscontexta` — Knowledge graph builder (research vault management)
 - `code-review`, `frontend-design`, `skill-creator`, `claude-code-setup`
 
 ## Architecture Reference
@@ -176,6 +188,37 @@ Create `hooks/my-hook.js`, then add to `settings.json`:
     }]
   }
 }
+```
+
+## New in This Update (2026-04-05)
+
+### GitNexus — Code Intelligence Layer
+Local knowledge graph engine that indexes codebases via Tree-sitter AST parsing into a graph database (LadybugDB). Exposes 16 MCP tools to Claude Code agents: hybrid search, 360-degree symbol context, blast radius analysis, git-diff impact detection, coordinated multi-file renames, and raw Cypher queries. Agents stop coding blind — every dependency is pre-computed at index time.
+
+```bash
+npm install -g gitnexus
+gitnexus analyze ~/your-repo    # indexes into .gitnexus/
+gitnexus list                   # show all indexed repos
+gitnexus query "concept" --repo name
+gitnexus impact "symbol" --repo name
+```
+
+### QMD — Semantic Search Engine
+Local semantic search over markdown collections. Hybrid BM25 keyword + vector search with LLM query expansion and neural reranking. All models run locally on GPU (embeddinggemma-300M + Qwen3-Reranker-0.6B + qmd-query-expansion-1.7B).
+
+```bash
+npm install -g @tobilu/qmd
+cd ~ && qmd collection add vault vault && qmd embed
+qmd query "your search" -c vault
+```
+
+### Arscontexta — Knowledge Management Plugin
+Research vault management system. Builds atomic knowledge graphs with prose-as-title notes, wiki-link connections, topic maps, and a full processing pipeline (capture -> reduce -> reflect -> verify). Includes 16 skills for knowledge work.
+
+```
+/plugin marketplace add agenticnotetaking/arscontexta
+/plugin install arscontexta@agenticnotetaking
+# restart, then: /arscontexta:setup
 ```
 
 ## License

@@ -149,6 +149,44 @@ if [ -d "${SETUP_DIR}/scripts" ]; then
   echo "  ✓ Scripts restored to ~/"
 fi
 
+# ── Install Global Tools ──────────────────────────────────────────
+echo "→ Installing global tools..."
+if command -v npm &>/dev/null; then
+  echo "  → Installing GitNexus (code intelligence)..."
+  npm install -g gitnexus 2>/dev/null && echo "  ✓ GitNexus installed" || echo "  ⚠ GitNexus install failed"
+  echo "  → Installing QMD (semantic search)..."
+  npm install -g @tobilu/qmd 2>/dev/null && echo "  ✓ QMD installed" || echo "  ⚠ QMD install failed"
+else
+  echo "  ⚠ npm not found — skip GitNexus and QMD"
+fi
+
+# ── Configure MCP Servers ────────────────────────────────────────
+echo "→ Configuring MCP servers..."
+CLAUDE_JSON="${HOME}/.claude.json"
+if [ -f "${CLAUDE_JSON}" ] && command -v node &>/dev/null; then
+  node -e "
+    const fs = require('fs');
+    const path = '${CLAUDE_JSON}'.replace(/\\\\/g, '/');
+    const d = JSON.parse(fs.readFileSync(path, 'utf8'));
+    if (!d.mcpServers) d.mcpServers = {};
+    const nodeExe = process.execPath.replace(/\\\\/g, '\\\\\\\\');
+    const npmRoot = require('child_process').execSync('npm root -g').toString().trim().replace(/\\\\/g, '\\\\\\\\');
+    d.mcpServers['gitnexus'] = {
+      command: nodeExe,
+      args: [npmRoot + '\\\\\\\\gitnexus\\\\\\\\dist\\\\\\\\cli\\\\\\\\index.js', 'mcp'],
+      type: 'stdio'
+    };
+    d.mcpServers['qmd'] = {
+      command: nodeExe,
+      args: [npmRoot + '\\\\\\\\@tobilu\\\\\\\\qmd\\\\\\\\dist\\\\\\\\cli\\\\\\\\qmd.js', 'mcp']
+    };
+    fs.writeFileSync(path, JSON.stringify(d, null, 2));
+    console.log('  ✓ MCP servers configured (gitnexus, qmd)');
+  " 2>/dev/null || echo "  ⚠ MCP config failed — see mcp-servers.json for manual setup"
+else
+  echo "  ⚠ ~/.claude.json not found — configure MCP after first claude session"
+fi
+
 # ── Summary ────────────────────────────────────────────────────────
 echo ""
 echo "╔═══════════════════════════════════════════╗"
@@ -174,7 +212,20 @@ echo "     claude"
 echo "     > /configure-ecc     # Install Everything Claude Code skills"
 echo "     > /gsd:update        # Install Get Shit Done framework"
 echo ""
-echo "  4. (Optional) Start services:"
+echo "  4. Install arscontexta plugin (knowledge graph builder):"
+echo "     /plugin marketplace add agenticnotetaking/arscontexta"
+echo "     /plugin install arscontexta@agenticnotetaking"
+echo "     # restart Claude Code, then: /arscontexta:setup"
+echo ""
+echo "  5. Index repos with GitNexus (code intelligence):"
+echo "     gitnexus analyze ~/aeon"
+echo "     gitnexus analyze ~/paperclip"
+echo "     gitnexus analyze ~/aeon/dashboard"
+echo ""
+echo "  6. Set up QMD vault search:"
+echo "     cd ~ && qmd collection add vault vault && qmd embed"
+echo ""
+echo "  7. (Optional) Start services:"
 echo "     bash ~/startup-services.sh"
 echo ""
 echo "  Done! Your Claude Code environment is ready."

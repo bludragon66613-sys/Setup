@@ -1,10 +1,15 @@
 {
   "env": {},
   "permissions": {
-    "defaultMode": "bypassPermissions",
     "allow": [
-      "mcp__pencil"
-    ]
+      "mcp__pencil",
+      "mcp__gitnexus"
+    ],
+    "defaultMode": "bypassPermissions"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/Rohan/.claude/hooks/gsd-statusline.js\""
   },
   "enabledPlugins": {
     "claude-mem@thedotmack": true,
@@ -13,7 +18,8 @@
     "chrome-devtools-mcp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "arscontexta@agenticnotetaking": true
   },
   "extraKnownMarketplaces": {
     "tobi": {
@@ -21,14 +27,22 @@
         "source": "github",
         "repo": "tobi/qmd"
       }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    },
+    "agenticnotetaking": {
+      "source": {
+        "source": "github",
+        "repo": "agenticnotetaking/arscontexta"
+      }
     }
   },
   "effortLevel": "high",
   "autoUpdatesChannel": "latest",
   "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
-  "statusLine": {
-    "type": "command",
-    "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:/Users/Rohan/.claude/hooks/gsd-statusline.js\""
-  }
+  "skipDangerousModePermissionPrompt": true
 }
