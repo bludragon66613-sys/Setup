@@ -223,7 +223,7 @@ function gitCommitAndPush(aeonDir, timestamp) {
     execSync(`git -C "${aeonDir}" add memory/topics/claude-sessions.md`, { timeout: 10000, stdio: 'pipe' });
     execSync(`git -C "${aeonDir}" commit -m "session: manifest ${timestamp}"`, { timeout: 10000, stdio: 'pipe' });
     execSync(`git -C "${aeonDir}" push origin main`, { timeout: 30000, stdio: 'pipe' });
-    process.stdout.write('[session-distill] manifest committed and pushed\n');
+    process.stderr.write('[session-distill] manifest committed and pushed\n');
     return true;
   } catch (e) {
     const msg = e.message || '';
@@ -248,7 +248,7 @@ function dispatchWorkflow() {
       'gh workflow run aeon.yml --repo bludragon66613-sys/NERV_02 -f skill=session-sync',
       { timeout: 15000, stdio: 'pipe', env: { ...process.env, GH_TOKEN: token } }
     );
-    process.stdout.write('[session-distill] session-sync dispatched\n');
+    process.stderr.write('[session-distill] session-sync dispatched\n');
   } catch (e) {
     process.stderr.write(`[session-distill] workflow dispatch failed (non-fatal): ${e.message}\n`);
   }

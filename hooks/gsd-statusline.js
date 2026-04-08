@@ -50,20 +50,14 @@ process.stdin.on('end', () => {
         }
       }
 
-      // Build progress bar (10 segments)
+      // Build progress bar (10 segments) — ASCII-only to avoid Windows ConPTY
+      // width miscalculation with Unicode block characters (#775)
       const filled = Math.floor(used / 10);
-      const bar = '█'.repeat(filled) + '░'.repeat(10 - filled);
+      const bar = '#'.repeat(filled) + '-'.repeat(10 - filled);
 
-      // Color based on usable context thresholds
-      if (used < 50) {
-        ctx = ` \x1b[32m${bar} ${used}%\x1b[0m`;
-      } else if (used < 65) {
-        ctx = ` \x1b[33m${bar} ${used}%\x1b[0m`;
-      } else if (used < 80) {
-        ctx = ` \x1b[38;5;208m${bar} ${used}%\x1b[0m`;
-      } else {
-        ctx = ` \x1b[5;31m💀 ${bar} ${used}%\x1b[0m`;
-      }
+      // Plain text only — ANSI escape codes cause Windows ConPTY to
+      // miscalculate line width, duplicating the entire UI footer (#775)
+      ctx = ` [${bar}] ${used}%`;
     }
 
     // Current task from todos
@@ -98,20 +92,20 @@ process.stdin.on('end', () => {
       try {
         const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
         if (cache.update_available) {
-          gsdUpdate = '\x1b[33m⬆ /gsd:update\x1b[0m │ ';
+          gsdUpdate = 'UPD /gsd:update | ';
         }
         if (cache.stale_hooks && cache.stale_hooks.length > 0) {
-          gsdUpdate += '\x1b[31m⚠ stale hooks — run /gsd:update\x1b[0m │ ';
+          gsdUpdate += 'STALE hooks /gsd:update | ';
         }
       } catch (e) {}
     }
 
-    // Output
+    // Output — minimal ANSI to avoid Windows ConPTY width miscalculation
     const dirname = path.basename(dir);
     if (task) {
-      process.stdout.write(`${gsdUpdate}\x1b[2m${model}\x1b[0m │ \x1b[1m${task}\x1b[0m │ \x1b[2m${dirname}\x1b[0m${ctx}`);
+      process.stdout.write(`${gsdUpdate}${model} | ${task} | ${dirname}${ctx}`);
     } else {
-      process.stdout.write(`${gsdUpdate}\x1b[2m${model}\x1b[0m │ \x1b[2m${dirname}\x1b[0m${ctx}`);
+      process.stdout.write(`${gsdUpdate}${model} | ${dirname}${ctx}`);
     }
   } catch (e) {
     // Silent fail - don't break statusline on parse errors

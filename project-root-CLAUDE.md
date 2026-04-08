@@ -4,6 +4,29 @@
 - GitHub: bludragon66613-sys
 - Memory: `~/.claude/projects/C--Users-Rohan/memory/` — read MEMORY.md at session start
 
+## 3-Layer Memory Architecture
+Claude Code uses a 3-layer persistent memory system synced to Obsidian:
+
+**Layer 1 — Session Memory:**
+- `~/.claude/projects/C--Users-Rohan/memory/` (MEMORY.md index + typed files)
+- claude-mem plugin (cross-session smart_search, timeline, observations)
+- continuous-learning hooks (pattern extraction from sessions)
+
+**Layer 2 — Knowledge Graph (Obsidian):**
+- Vault: `~/OneDrive/Documents/Agentic knowledge/`
+- qmd MCP — semantic search over vault (BM25 + vector embeddings, 2 collections)
+- memory MCP — `@modelcontextprotocol/server-memory` entity/relation graph at `~/.claude/memory-graph/knowledge.json`
+- arscontexta plugin — knowledge architecture
+- MindMap.md auto-rebuilt on session start/stop via `memory-obsidian-sync.js`
+- Hooks: `memory-obsidian-sync.js` (SessionStart+Stop), `vault-session-logger.js` (Stop)
+
+**Layer 3 — Ingestion Pipeline:**
+- `web-ingest-to-vault.js` — PostToolUse hook on WebFetch/WebSearch saves content to `vault/raw/`
+- Session logger converts `.tmp`/`.json` sessions → markdown in vault
+- qmd re-indexes + re-embeds on session end
+
+**Re-index after major changes:** `qmd update && qmd embed`
+
 ## Session Startup (run first every session)
 Run `bash ~/startup-services.sh` to boot all services:
 1. **OpenClaw** — Telegram bot gateway (healthcheck auto-fixes)
