@@ -1,0 +1,12 @@
+{
+  "status": "in_progress",
+  "evals_passed": 5,
+  "last_failure_date": "2026-04-04",
+  "evals_total": 5,
+  "clean_weeks": 0,
+  "start_date": "2026-04-04",
+  "exit_criteria": "0 eval failures for 2 consecutive weeks",
+  "phase_name": "Structural Reliability",
+  "phase": 1,
+  "notes": "All evals passing. heartbeat-response skipped (manual check). Ready for clean week tracking."
+}
