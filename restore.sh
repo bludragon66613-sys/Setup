@@ -100,29 +100,29 @@ if [ -f "${CLAUDE_HOME}/settings.json" ]; then
   cp "${CLAUDE_HOME}/settings.json" "${CLAUDE_HOME}/settings.json.bak"
   echo "  ℹ Existing settings.json backed up to settings.json.bak"
 fi
-cp "${SETUP_DIR}/settings.json" "${CLAUDE_HOME}/settings.json"
+cp "${SETUP_DIR}/config/settings.json" "${CLAUDE_HOME}/settings.json"
 echo "  ✓ Settings restored (hooks, plugins, effort level)"
 
-# ── Restore Memory ─────────────────────────────────────────────────
+# ── Restore Memory (from vault/Memory/) ───────────────────────────
 echo "→ Restoring memory..."
 PROJECT_MEM="${CLAUDE_HOME}/projects/C--Users-$(whoami)/memory"
 mkdir -p "${PROJECT_MEM}"
 mem_count=0
-for f in "${SETUP_DIR}/memory"/*.md; do
+for f in "${SETUP_DIR}/vault/Memory"/*.md; do
   [ -f "$f" ] || continue
   cp "$f" "${PROJECT_MEM}/"
   mem_count=$((mem_count + 1))
 done
 echo "  ✓ ${mem_count} memory files restored to ${PROJECT_MEM}"
 
-# ── Restore CLAUDE.md files ────────────────────────────────────────
+# ── Restore CLAUDE.md files (from config/) ────────────────────────
 echo "→ Restoring CLAUDE.md files..."
-if [ -f "${SETUP_DIR}/claude-config-CLAUDE.md" ]; then
-  cp "${SETUP_DIR}/claude-config-CLAUDE.md" "${CLAUDE_HOME}/CLAUDE.md"
+if [ -f "${SETUP_DIR}/config/claude-config-CLAUDE.md" ]; then
+  cp "${SETUP_DIR}/config/claude-config-CLAUDE.md" "${CLAUDE_HOME}/CLAUDE.md"
   echo "  ✓ ~/.claude/CLAUDE.md restored"
 fi
-if [ -f "${SETUP_DIR}/project-root-CLAUDE.md" ]; then
-  cp "${SETUP_DIR}/project-root-CLAUDE.md" "${HOME}/CLAUDE.md"
+if [ -f "${SETUP_DIR}/config/project-root-CLAUDE.md" ]; then
+  cp "${SETUP_DIR}/config/project-root-CLAUDE.md" "${HOME}/CLAUDE.md"
   echo "  ✓ ~/CLAUDE.md restored"
 fi
 

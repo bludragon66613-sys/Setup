@@ -13,8 +13,8 @@ const MEMORY_DIR = path.join(HOME, '.claude', 'projects', 'C--Users-Rohan', 'mem
 const VAULT_BASE = path.join(HOME, 'OneDrive', 'Documents', 'Agentic knowledge');
 const MEMORY_VAULT = path.join(VAULT_BASE, 'Memory');
 const MEMORY_PROJECTS = path.join(MEMORY_VAULT, 'projects');
-const AGENTS_DIR = path.join(HOME, '.claude', 'agents');
-const AGENTS_VAULT = path.join(MEMORY_VAULT, 'claude-agents');
+// Agents are NOT synced to vault — canonical source is ~/.claude/agents/
+// and backed up to Setup/agents/ on GitHub. No duplication.
 const AEON_LOGS_DIR = path.join(HOME, 'aeon', 'memory', 'logs');
 const AEON_LOGS_VAULT = path.join(VAULT_BASE, 'Aeon Logs');
 const CLAUDE_MD = path.join(HOME, 'CLAUDE.md');
@@ -56,25 +56,6 @@ function syncMemoryFiles() {
   return synced;
 }
 
-function syncAgents() {
-  if (!fs.existsSync(AGENTS_DIR)) return 0;
-  fs.mkdirSync(AGENTS_VAULT, { recursive: true });
-
-  // Sync top-level custom agent .md files (not subdirs like gsd/, core/)
-  const files = fs.readdirSync(AGENTS_DIR).filter(f => f.endsWith('.md'));
-  let count = 0;
-  for (const file of files) {
-    const src = path.join(AGENTS_DIR, file);
-    const dest = path.join(AGENTS_VAULT, file);
-    const srcStat = fs.statSync(src);
-    const destExists = fs.existsSync(dest);
-    if (!destExists || srcStat.mtimeMs > fs.statSync(dest).mtimeMs) {
-      fs.copyFileSync(src, dest);
-      count++;
-    }
-  }
-  return count;
-}
 
 function buildMindMap(files) {
   const allFiles = files.map(f => {
@@ -224,7 +205,6 @@ function writeDailyNote() {
 function main() {
   try {
     const synced = syncMemoryFiles();
-    const agentCount = syncAgents();
     const aeonCount = syncAeonLogs();
     const claudeSynced = syncClaudeMd();
     writeDailyNote();
@@ -235,7 +215,6 @@ function main() {
     }
 
     const parts = [`${synced.length} memory`];
-    if (agentCount > 0) parts.push(`${agentCount} agents`);
     if (aeonCount > 0) parts.push(`${aeonCount} aeon logs`);
     if (claudeSynced) parts.push('CLAUDE.md');
     process.stderr.write(`[memory-sync] Synced ${parts.join(' + ')} → Obsidian. MindMap.md updated.\n`);
