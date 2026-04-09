@@ -18,11 +18,11 @@ Claude Code uses a 3-layer persistent memory system synced to Obsidian:
 - memory MCP — `@modelcontextprotocol/server-memory` entity/relation graph at `~/.claude/memory-graph/knowledge.json`
 - arscontexta plugin — knowledge architecture
 - MindMap.md auto-rebuilt on session start/stop via `memory-obsidian-sync.js`
-- Hooks: `memory-obsidian-sync.js` (SessionStart+Stop), `vault-session-logger.js` (Stop)
+- Hooks: `memory-obsidian-sync.js` (SessionStart+Stop) — unified: syncs memory, aeon logs, sessions, and rebuilds MindMap.md
 
 **Layer 3 — Ingestion Pipeline:**
-- `web-ingest-to-vault.js` — PostToolUse hook on WebFetch/WebSearch saves content to `vault/raw/`
-- Session logger converts `.tmp`/`.json` sessions → markdown in vault
+- `web-ingest-to-vault.js` — PostToolUse hook on WebFetch/WebSearch, uses markitdown for HTML→MD conversion
+- Session sync integrated into `memory-obsidian-sync.js` (converts `.tmp`/`.json` → vault markdown)
 - qmd re-indexes + re-embeds on session end
 
 **Re-index after major changes:** `qmd update && qmd embed`
@@ -30,8 +30,8 @@ Claude Code uses a 3-layer persistent memory system synced to Obsidian:
 ## Session Startup (run first every session)
 Run `bash ~/startup-services.sh` to boot all services:
 1. **OpenClaw** — Telegram bot gateway (healthcheck auto-fixes)
-2. **Paperclip** — Agent platform on :3100 (start before dashboard)
-3. **Dashboard** — NERV on :5555 (`--webpack` mode, NOT turbopack — Windows bug)
+2. **Paperclip** — Agent platform on :3100
+3. **Dashboard** — DISABLED from auto-start. Run manually when needed: `cd ~/aeon/dashboard && npx next dev --webpack --port 5555`
 
 ## Active Projects
 

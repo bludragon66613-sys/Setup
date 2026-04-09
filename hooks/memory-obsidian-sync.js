@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 /**
  * memory-obsidian-sync.js
- * Runs on SessionStart + Stop: syncs Claude memory, Aeon logs, and CLAUDE.md
- * to Obsidian vault. Rebuilds MindMap.md with wikilinks on every run.
+ * Unified SessionStart + Stop hook: syncs Claude memory, Aeon logs, CLAUDE.md,
+ * and session files to Obsidian vault. Rebuilds MindMap.md with wikilinks.
+ *
+ * Consolidates former vault-session-logger.js (session copy + qmd reindex)
+ * into this single hook to eliminate redundant Node.js process spawn at Stop.
  */
 
 const fs = require('fs');
@@ -16,6 +19,9 @@ const AEON_LOGS_DIR = path.join(HOME, 'aeon', 'memory', 'logs');
 const AEON_LOGS_VAULT = path.join(VAULT_BASE, 'Aeon Logs');
 const CLAUDE_MD = path.join(HOME, 'CLAUDE.md');
 const MINDMAP_FILE = path.join(VAULT_BASE, 'MindMap.md');
+const SESSIONS_DIR = path.join(HOME, '.claude', 'sessions');
+const SESSIONS_VAULT = path.join(VAULT_BASE, 'Claude Sessions');
+const SYNC_MARKER = path.join(SESSIONS_DIR, '.last-vault-sync');
 
 function parseFrontmatter(raw) {
   const match = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
@@ -150,6 +156,59 @@ function syncClaudeMd() {
   return true;
 }
 
+function syncSessionFiles() {
+  if (!fs.existsSync(SESSIONS_DIR)) return 0;
+  fs.mkdirSync(SESSIONS_VAULT, { recursive: true });
+
+  let lastSync = 0;
+  try { lastSync = fs.statSync(SYNC_MARKER).mtimeMs; } catch {}
+
+  const files = fs.readdirSync(SESSIONS_DIR).filter(f => f.endsWith('.tmp') || f.endsWith('.json'));
+  let copied = 0;
+
+  for (const file of files) {
+    const src = path.join(SESSIONS_DIR, file);
+    const stat = fs.statSync(src);
+    if (stat.mtimeMs <= lastSync) continue;
+
+    let content = fs.readFileSync(src, 'utf8');
+
+    if (file.endsWith('.json')) {
+      try {
+        const data = JSON.parse(content);
+        const msgs = (data.messages || data.conversation || []);
+        if (msgs.length === 0) continue;
+        const date = data.created_at ? new Date(data.created_at).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
+        const lines = [`# Session: ${file.replace('.json', '')}\n`, `**Date:** ${date}\n`, `**Messages:** ${msgs.length}\n\n---\n`];
+        for (const m of msgs) {
+          const role = m.role || m.type || 'unknown';
+          const text = typeof m.content === 'string' ? m.content : JSON.stringify(m.content || '').slice(0, 500);
+          lines.push(`\n**[${role.toUpperCase()}]**\n${text}\n`);
+        }
+        content = lines.join('');
+      } catch {
+        continue;
+      }
+    }
+
+    const dest = path.join(SESSIONS_VAULT, file.replace(/\.(tmp|json)$/, '.md'));
+    fs.writeFileSync(dest, content);
+    copied++;
+  }
+
+  fs.writeFileSync(SYNC_MARKER, new Date().toISOString());
+
+  if (copied > 0) {
+    const { execSync } = require('child_process');
+    try {
+      execSync('qmd update', { stdio: 'ignore', timeout: 30000 });
+      execSync('qmd embed', { stdio: 'ignore', timeout: 120000 });
+    } catch {}
+  }
+
+  return copied;
+}
+
 function writeDailyNote() {
   const today = new Date().toISOString().slice(0, 10);
   const dailyFile = path.join(VAULT_BASE, `${today}.md`);
@@ -195,6 +254,7 @@ function main() {
     const synced = syncMemoryFiles();
     const aeonCount = syncAeonLogs();
     const claudeSynced = syncClaudeMd();
+    const sessionCount = syncSessionFiles();
     writeDailyNote();
 
     if (synced.length > 0) {
@@ -204,6 +264,7 @@ function main() {
 
     const parts = [`${synced.length} memory`];
     if (aeonCount > 0) parts.push(`${aeonCount} aeon logs`);
+    if (sessionCount > 0) parts.push(`${sessionCount} sessions`);
     if (claudeSynced) parts.push('CLAUDE.md');
     process.stderr.write(`[memory-sync] Synced ${parts.join(' + ')} → Obsidian. MindMap.md updated.\n`);
   } catch (err) {
