@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// gsd-hook-version: 1.30.0
+// gsd-hook-version: 1.34.2
 // Claude Code Statusline - GSD Edition
 // Shows: model | current task | directory | context usage
 
@@ -35,7 +35,10 @@ process.stdin.on('end', () => {
 
       // Write context metrics to bridge file for the context-monitor PostToolUse hook.
       // The monitor reads this file to inject agent-facing warnings when context is low.
-      if (session) {
+      // Reject session IDs with path separators or traversal sequences to prevent
+      // a malicious session_id from writing files outside the temp directory.
+      const sessionSafe = session && !/[/\\]|\.\./.test(session);
+      if (sessionSafe) {
         try {
           const bridgePath = path.join(os.tmpdir(), `claude-ctx-${session}.json`);
           const bridgeData = JSON.stringify({
@@ -50,14 +53,20 @@ process.stdin.on('end', () => {
         }
       }
 
-      // Build progress bar (10 segments) — ASCII-only to avoid Windows ConPTY
-      // width miscalculation with Unicode block characters (#775)
+      // Build progress bar (10 segments)
       const filled = Math.floor(used / 10);
-      const bar = '#'.repeat(filled) + '-'.repeat(10 - filled);
+      const bar = '█'.repeat(filled) + '░'.repeat(10 - filled);
 
-      // Plain text only — ANSI escape codes cause Windows ConPTY to
-      // miscalculate line width, duplicating the entire UI footer (#775)
-      ctx = ` [${bar}] ${used}%`;
+      // Color based on usable context thresholds
+      if (used < 50) {
+        ctx = ` \x1b[32m${bar} ${used}%\x1b[0m`;
+      } else if (used < 65) {
+        ctx = ` \x1b[33m${bar} ${used}%\x1b[0m`;
+      } else if (used < 80) {
+        ctx = ` \x1b[38;5;208m${bar} ${used}%\x1b[0m`;
+      } else {
+        ctx = ` \x1b[5;31m💀 ${bar} ${used}%\x1b[0m`;
+      }
     }
 
     // Current task from todos
@@ -86,26 +95,30 @@ process.stdin.on('end', () => {
     }
 
     // GSD update available?
+    // Check shared cache first (#1421), fall back to runtime-specific cache for
+    // backward compatibility with older gsd-check-update.js versions.
     let gsdUpdate = '';
-    const cacheFile = path.join(claudeDir, 'cache', 'gsd-update-check.json');
+    const sharedCacheFile = path.join(homeDir, '.cache', 'gsd', 'gsd-update-check.json');
+    const legacyCacheFile = path.join(claudeDir, 'cache', 'gsd-update-check.json');
+    const cacheFile = fs.existsSync(sharedCacheFile) ? sharedCacheFile : legacyCacheFile;
     if (fs.existsSync(cacheFile)) {
       try {
         const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
         if (cache.update_available) {
-          gsdUpdate = 'UPD /gsd:update | ';
+          gsdUpdate = '\x1b[33m⬆ /gsd-update\x1b[0m │ ';
         }
         if (cache.stale_hooks && cache.stale_hooks.length > 0) {
-          gsdUpdate += 'STALE hooks /gsd:update | ';
+          gsdUpdate += '\x1b[31m⚠ stale hooks — run /gsd-update\x1b[0m │ ';
         }
       } catch (e) {}
     }
 
-    // Output — minimal ANSI to avoid Windows ConPTY width miscalculation
+    // Output
     const dirname = path.basename(dir);
     if (task) {
-      process.stdout.write(`${gsdUpdate}${model} | ${task} | ${dirname}${ctx}`);
+      process.stdout.write(`${gsdUpdate}\x1b[2m${model}\x1b[0m │ \x1b[1m${task}\x1b[0m │ \x1b[2m${dirname}\x1b[0m${ctx}`);
     } else {
-      process.stdout.write(`${gsdUpdate}${model} | ${dirname}${ctx}`);
+      process.stdout.write(`${gsdUpdate}\x1b[2m${model}\x1b[0m │ \x1b[2m${dirname}\x1b[0m${ctx}`);
     }
   } catch (e) {
     // Silent fail - don't break statusline on parse errors
