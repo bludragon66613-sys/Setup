@@ -5,16 +5,15 @@
  * into Obsidian vault as searchable notes with frontmatter.
  *
  * Layer 3 of the 3-layer memory system: Ingestion Pipeline
- * Uses markitdown (when available) for cleaner HTML→Markdown conversion.
+ * Converts external content (articles, research, tweets) into vault notes.
  */
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
 const HOME = process.env.USERPROFILE || process.env.HOME;
 const VAULT_RAW = path.join(HOME, 'OneDrive', 'Documents', 'Agentic knowledge', 'raw');
-const MAX_CONTENT_LENGTH = 8000;
+const MAX_CONTENT_LENGTH = 8000; // truncate very long content
 
 function sanitizeFilename(str) {
   return str
@@ -32,26 +31,6 @@ function extractDomain(url) {
   }
 }
 
-/**
- * Convert HTML content to clean markdown via markitdown CLI.
- * Falls back to raw content if markitdown is unavailable.
- */
-function htmlToMarkdown(htmlContent) {
-  try {
-    const tmpFile = path.join(HOME, '.claude', '.tmp-ingest.html');
-    fs.writeFileSync(tmpFile, htmlContent);
-    const md = execSync(`markitdown "${tmpFile}"`, {
-      encoding: 'utf8',
-      timeout: 8000,
-      stdio: ['pipe', 'pipe', 'ignore'],
-    });
-    try { fs.unlinkSync(tmpFile); } catch {}
-    return md.trim() || htmlContent;
-  } catch {
-    return htmlContent; // fallback: raw content
-  }
-}
-
 function main() {
   let input = '';
   process.stdin.setEncoding('utf8');
@@ -63,13 +42,15 @@ function main() {
       const toolInput = data.tool_input || {};
       const toolOutput = data.tool_output || '';
 
+      // Only process WebFetch and WebSearch results
       if (!['WebFetch', 'WebSearch'].includes(toolName)) {
         process.stdout.write(input);
         return;
       }
 
-      const rawOutput = typeof toolOutput === 'string' ? toolOutput : JSON.stringify(toolOutput);
-      if (!rawOutput || rawOutput.length < 100 || rawOutput.includes('Request failed')) {
+      // Skip empty or error outputs
+      const output = typeof toolOutput === 'string' ? toolOutput : JSON.stringify(toolOutput);
+      if (!output || output.length < 100 || output.includes('Request failed')) {
         process.stdout.write(input);
         return;
       }
@@ -79,12 +60,6 @@ function main() {
       const now = new Date();
       const dateStr = now.toISOString().slice(0, 10);
       const timeStr = now.toISOString().slice(11, 19).replace(/:/g, '');
-
-      // Convert HTML-heavy content through markitdown for cleaner output
-      const looksLikeHtml = /<[a-z][\s\S]*>/i.test(rawOutput.slice(0, 500));
-      const output = looksLikeHtml ? htmlToMarkdown(rawOutput) : rawOutput;
-      const trimmed = output.slice(0, MAX_CONTENT_LENGTH);
-      const truncNote = output.length > MAX_CONTENT_LENGTH ? `\n> [Truncated — ${output.length} chars total]` : '';
 
       if (toolName === 'WebFetch') {
         const url = toolInput.url || 'unknown';
@@ -107,8 +82,9 @@ function main() {
           `> URL: ${url}`,
           `> Query: ${prompt}`,
           '',
-          trimmed,
-          truncNote,
+          output.slice(0, MAX_CONTENT_LENGTH),
+          '',
+          output.length > MAX_CONTENT_LENGTH ? `\n> [Truncated — ${output.length} chars total]` : '',
         ].join('\n');
 
         fs.writeFileSync(path.join(VAULT_RAW, filename), content);
@@ -131,16 +107,22 @@ function main() {
           `# Search: ${query}`,
           `> Searched: ${now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST`,
           '',
-          trimmed,
-          truncNote,
+          output.slice(0, MAX_CONTENT_LENGTH),
+          '',
+          output.length > MAX_CONTENT_LENGTH ? `\n> [Truncated — ${output.length} chars total]` : '',
         ].join('\n');
 
         fs.writeFileSync(path.join(VAULT_RAW, filename), content);
         process.stderr.write(`[web-ingest] Saved ${filename} to vault/raw/\n`);
       }
 
+      // Remind about wiki compilation
+      process.stderr.write(`[wiki] New raw source captured. Run /wiki-ingest to compile into wiki.\n`);
+
+      // Pass through unchanged
       process.stdout.write(input);
     } catch (err) {
+      // Don't block the tool on errors
       process.stderr.write(`[web-ingest] Error: ${err.message}\n`);
       process.stdout.write(input);
     }

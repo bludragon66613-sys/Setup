@@ -18,11 +18,17 @@
 - [project_omc.md](project_omc.md) — oh-my-claudecode v4.9.3: multi-agent orchestration, smart model routing, autopilot/ralph modes
 - [project_autoagent.md](project_autoagent.md) — AutoAgent: autonomous agent/skill improvement loop at ~/autoagent (from kevinrgu/autoagent)
 - [project_dexfolioexp.md](project_dexfolioexp.md) — DexFolioExp: Solana DEX analytics platform, Rust+React, forked from GPoet/dexfolio
-- [project_dexfolioexp_design.md](project_dexfolioexp_design.md) — DexFolioExp design complete: all 8 mockups approved, brand tokens in production, 4 pages enhanced
 
-## Session Savepoints (latest — older ones in _archive/)
-- [session_savepoint_2026-04-08b.md](session_savepoint_2026-04-08b.md) — DexFolioExp: all mockups deployed, 4 pages enhanced, 5 items remaining
-- [session_savepoint_2026-04-08.md](session_savepoint_2026-04-08.md) — DexFolioExp: brand bible done, Token Chart mockup approved
+## Session Savepoints (latest 5 — older ones in _archive/)
+- `~/.claude/sessions/2026-03-27-tallyai-auth-fix-session.tmp` — TallyAI auth fix: disabled auth for MVP, tabs now work on production
+- [session_savepoint_2026-03-27.md](session_savepoint_2026-03-27.md) — TallyAI hardening: 15 security fixes, Upstash Redis, 345 tests, production deploy
+- [session_savepoint_2026-03-26d.md](session_savepoint_2026-03-26d.md) — TallyAI MVP: full build, Munshi brand, Vercel deploy, 8 skills installed
+- [session_savepoint_2026-03-26c.md](session_savepoint_2026-03-26c.md) — SIGNAL consultancy: full GTM, pricing, brand, 25-slide deck
+- [session_savepoint_2026-03-26b.md](session_savepoint_2026-03-26b.md) — NERV brand mobile optimization deployed
+- [session_savepoint_2026-03-26.md](session_savepoint_2026-03-26.md) — All 441 Paperclip agents bulk-configured, Windows symlink fix, first heartbeat
+
+## In Progress
+- `~/.claude/sessions/2026-03-24-nerv-desktop-session.tmp` — NERV Desktop app (Tauri+React). Brainstorm done, spec not written
 
 ## Reference
 - [reference_skill_graphs.md](reference_skill_graphs.md) — Skill graph architecture: 11 domain MOCs in _mocs/ connecting 285 skills via wikilinks (arscontexta pattern)

@@ -4,7 +4,6 @@ description: "Use this agent when a user wants to build a real, working product 
 model: sonnet
 color: pink
 memory: project
-effort: high
 tools:
   - Read
   - Write

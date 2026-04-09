@@ -4,7 +4,6 @@ description: "Use this agent when a user wants to design, build, and deploy a cu
 model: sonnet
 color: blue
 memory: project
-effort: high
 tools:
   - Read
   - Write

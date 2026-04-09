@@ -18,11 +18,11 @@ Claude Code uses a 3-layer persistent memory system synced to Obsidian:
 - memory MCP — `@modelcontextprotocol/server-memory` entity/relation graph at `~/.claude/memory-graph/knowledge.json`
 - arscontexta plugin — knowledge architecture
 - MindMap.md auto-rebuilt on session start/stop via `memory-obsidian-sync.js`
-- Hooks: `memory-obsidian-sync.js` (SessionStart+Stop) — unified: syncs memory, aeon logs, sessions, and rebuilds MindMap.md
+- Hooks: `memory-obsidian-sync.js` (SessionStart+Stop), `vault-session-logger.js` (Stop)
 
 **Layer 3 — Ingestion Pipeline:**
-- `web-ingest-to-vault.js` — PostToolUse hook on WebFetch/WebSearch, uses markitdown for HTML→MD conversion
-- Session sync integrated into `memory-obsidian-sync.js` (converts `.tmp`/`.json` → vault markdown)
+- `web-ingest-to-vault.js` — PostToolUse hook on WebFetch/WebSearch saves content to `vault/raw/`
+- Session logger converts `.tmp`/`.json` sessions → markdown in vault
 - qmd re-indexes + re-embeds on session end
 
 **Re-index after major changes:** `qmd update && qmd embed`
@@ -30,8 +30,8 @@ Claude Code uses a 3-layer persistent memory system synced to Obsidian:
 ## Session Startup (run first every session)
 Run `bash ~/startup-services.sh` to boot all services:
 1. **OpenClaw** — Telegram bot gateway (healthcheck auto-fixes)
-2. **Paperclip** — Agent platform on :3100
-3. **Dashboard** — DISABLED from auto-start. Run manually when needed: `cd ~/aeon/dashboard && npx next dev --webpack --port 5555`
+2. **Paperclip** — Agent platform on :3100 (start before dashboard)
+3. **Dashboard** — NERV on :5555 (`--webpack` mode, NOT turbopack — Windows bug)
 
 ## Active Projects
 
@@ -64,6 +64,7 @@ These are globally installed in `~/.claude/agents/` and available in every sessi
 | `ui-ux-architect` | Design audit, UI polish, visual inconsistencies | Reads design docs, phases improvements, never touches logic |
 | `senior-software-engineer` | Non-trivial code, refactors, debugging | Surfaces assumptions, pushes back, surgical scope |
 | `technical-cofounder` | Building a product from an idea | Phase-by-phase: discovery → plan → build → polish → handoff |
+| `super-designer` | Design system creation, cross-platform design, token engineering, design evaluation, Apple HIG | Universal design intelligence — web + Apple platforms, 9 domain skills, Audit/Create/Translate modes |
 
 ### OMC Agents (oh-my-claudecode v4.9.3)
 Smart model routing: Haiku for search/docs, Sonnet for execution, Opus for architecture/planning.

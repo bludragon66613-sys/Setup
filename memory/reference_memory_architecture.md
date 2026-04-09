@@ -2,8 +2,8 @@
 name: 3-Layer Memory Architecture
 description: Claude Code 3-layer memory system — session memory, Obsidian knowledge graph (qmd + server-memory MCP), and web ingestion pipeline
 type: reference
-originSessionId: 719e33fe-7aa0-4373-ac54-265d1bc404dc
 ---
+
 ## Architecture (implemented 2026-04-06)
 
 **Layer 1 — Session Memory:**
@@ -19,10 +19,9 @@ originSessionId: 719e33fe-7aa0-4373-ac54-265d1bc404dc
 - Hooks wire Memory→Obsidian sync on SessionStart+Stop
 
 **Layer 3 — Ingestion Pipeline:**
-- `web-ingest-to-vault.js` PostToolUse hook on WebFetch/WebSearch → uses markitdown for HTML→MD → saves to vault `raw/`
-- Session sync merged into `memory-obsidian-sync.js` → sessions → vault `Claude Sessions/`
+- `web-ingest-to-vault.js` PostToolUse hook on WebFetch/WebSearch → saves to vault `raw/`
+- `vault-session-logger.js` Stop hook → sessions → vault `Claude Sessions/`
 - qmd re-indexes + re-embeds on session end
-- `markitdown` CLI available for any document→markdown conversion (PDF, DOCX, PPTX, etc.)
 
 **MCP Servers:**
 - qmd (semantic search over Obsidian)
@@ -34,6 +33,6 @@ originSessionId: 719e33fe-7aa0-4373-ac54-265d1bc404dc
 **Hooks registered in settings.json:**
 - SessionStart: memory-obsidian-sync.js
 - PostToolUse: web-ingest-to-vault.js (WebFetch|WebSearch)
-- Stop: memory-obsidian-sync.js (unified — includes session sync + qmd reindex)
+- Stop: memory-obsidian-sync.js, vault-session-logger.js
 
 **Maintenance:** `qmd update && qmd embed` after major vault changes
