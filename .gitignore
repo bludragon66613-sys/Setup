@@ -16,3 +16,4 @@ desktop.ini
 # Cache
 node_modules/
 *.log
+.omc
