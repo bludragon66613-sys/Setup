@@ -244,6 +244,43 @@ Never generate these anti-patterns:
 
 ---
 
+## FORKABLE STARTER TEMPLATES
+
+When starting from scratch, recommend or fork proven starters instead of building from zero:
+
+| Type | Repo | Stack | Strength |
+|------|------|-------|----------|
+| **Component library** | TailGrids/tailgrids | React + Tailwind | 100+ production components, Figma parity |
+| **Admin dashboard** | horizon-ui/horizon-tailwind-react | React + Tailwind | Charts, widgets, SaaS-ready |
+| **Interactive components** | themesberg/flowbite | Tailwind | 68+ interactive elements, modals, carousels |
+| **UI kit + admin** | creativetimofficial/notus-react | React + Tailwind | Clean professional layouts |
+| **Data dashboard** | cruip/tailwind-dashboard-template | React + Tailwind + Chart.js | Responsive data viz |
+| **Polished admin** | TailAdmin/tailadmin-free-tailwind-dashboard-template | Tailwind | Comprehensive, all pages |
+| **3D portfolio** | Abhiz2411/3D-interactive-portfolio | React + Three.js | Cosmic theme, 3D animations |
+
+**Fork workflow**: Fork → Clone → detect stack → apply brand reference → elevate with motion design system → ship.
+
+---
+
+## INTERACTIVE UX PATTERNS
+
+**Navbar**: Floating with `backdrop-blur-md`, transparent → solid on scroll (`scrollY > 50`), hide on scroll-down / show on scroll-up.
+
+**Dark/Light Mode**: CSS custom properties + `prefers-color-scheme` media query. Persist to `localStorage`. Toggle with `data-theme` attribute on `<html>`. Transition: `transition: background-color 200ms ease, color 200ms ease`.
+
+**3D Carousels**: CSS `perspective` + `rotateY` transforms. Or Three.js OrbitControls for product showcases.
+
+**Mobile Gestures**: Touch swipe detection for carousels/drawers. Use `touchstart`/`touchend` delta, threshold 50px. CSS `scroll-snap-type: x mandatory` for native scroll snap.
+
+**Micro-interactions**: Button ripple (radial-gradient expanding from click point), input focus glow (box-shadow transition), checkbox tick (SVG stroke-dashoffset animation).
+
+**State Management for Interactive UX**:
+- **Zustand** — Lightweight, no boilerplate, perfect for UI state (modals, sidebars, theme)
+- **Jotai** — Atomic state, great for independent UI atoms
+- **Supabase** — Dynamic content backing, realtime subscriptions for live dashboards
+
+---
+
 ## BRAND REFERENCE SYSTEM
 
 When the user says "build with the [Brand] aesthetic", load `~/.claude/design-references/[brand]/DESIGN.md` and apply its exact tokens, patterns, and philosophy. Available: airbnb, apple, bmw, claude, clay, cursor, figma, framer, linear.app, notion, spotify, stripe, supabase, vercel, webflow, and 39 more.
