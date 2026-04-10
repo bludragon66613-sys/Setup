@@ -69,10 +69,32 @@ else
   done
 fi
 
-# 4. Obsidian Sync
+# 5. Obsidian Sync
 echo ""
-echo "[5/5] Obsidian Sync..."
+echo "[5/6] Obsidian Sync..."
 node "$HOME/.claude/hooks/memory-obsidian-sync.js" 2>&1
+
+# 6. Auth Expiry Check
+echo ""
+echo "[6/6] Auth Expiry Check..."
+node -e "
+const fs = require('fs');
+const path = require('path');
+const f = path.join(process.env.USERPROFILE || process.env.HOME, '.openclaw/agents/main/agent/auth-profiles.json');
+if (!fs.existsSync(f)) { console.log('  No auth profiles found'); process.exit(0); }
+const d = JSON.parse(fs.readFileSync(f, 'utf8'));
+const now = Date.now();
+let warnings = 0;
+for (const [k,v] of Object.entries(d.profiles || d)) {
+  if (!v || !v.expires) continue;
+  const exp = new Date(typeof v.expires === 'number' && v.expires > 1e12 ? v.expires : v.expires * 1000);
+  const days = Math.round((exp - now) / 86400000);
+  if (days < 0) { console.log('  \x1b[31m[EXPIRED]\x1b[0m ' + k + ' expired ' + Math.abs(days) + ' days ago'); warnings++; }
+  else if (days <= 3) { console.log('  \x1b[33m[WARN]\x1b[0m ' + k + ' expires in ' + days + ' days (' + exp.toISOString().slice(0,10) + ')'); warnings++; }
+  else { console.log('  \x1b[32m[OK]\x1b[0m ' + k + ' expires in ' + days + ' days'); }
+}
+if (warnings === 0) console.log('  All auth tokens healthy');
+" 2>/dev/null || echo "  Auth check skipped"
 
 echo ""
 echo "=== Startup Complete ==="
