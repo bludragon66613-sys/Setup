@@ -77,12 +77,16 @@ echo "  ✓ ${agent_count} agents restored (root + 5 subdirectories)"
 # ── Restore Hooks ──────────────────────────────────────────────────
 echo "→ Restoring hooks..."
 hook_count=0
-for f in "${SETUP_DIR}/hooks"/*.js; do
+for f in "${SETUP_DIR}/hooks"/*.{js,mjs,sh}; do
   [ -f "$f" ] || continue
   cp "$f" "${CLAUDE_HOME}/hooks/"
   chmod +x "${CLAUDE_HOME}/hooks/$(basename "$f")" 2>/dev/null || true
   hook_count=$((hook_count + 1))
 done
+# Copy lib/ directory if present (shared hook utilities)
+if [ -d "${SETUP_DIR}/hooks/lib" ]; then
+  cp -r "${SETUP_DIR}/hooks/lib" "${CLAUDE_HOME}/hooks/"
+fi
 # Copy hooks.json and README if present
 [ -f "${SETUP_DIR}/hooks/hooks.json" ] && cp "${SETUP_DIR}/hooks/hooks.json" "${CLAUDE_HOME}/hooks/"
 [ -f "${SETUP_DIR}/hooks/README.md" ] && cp "${SETUP_DIR}/hooks/README.md" "${CLAUDE_HOME}/hooks/"
@@ -105,15 +109,25 @@ echo "  ✓ Settings restored (hooks, plugins, effort level)"
 
 # ── Restore Memory (from vault/Memory/) ───────────────────────────
 echo "→ Restoring memory..."
-PROJECT_MEM="${CLAUDE_HOME}/projects/C--Users-$(whoami)/memory"
+# Memory path varies by OS: Windows uses C--Users-X, macOS uses Users-X
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+  PROJECT_MEM="${CLAUDE_HOME}/projects/C--Users-$(whoami)/memory"
+else
+  PROJECT_MEM="${CLAUDE_HOME}/projects/Users-$(whoami)/memory"
+fi
 mkdir -p "${PROJECT_MEM}"
 mem_count=0
-for f in "${SETUP_DIR}/vault/Memory"/*.md; do
+# Prefer config/ (latest sync) over vault/Memory/ (may be stale)
+MEM_SOURCE="${SETUP_DIR}/config"
+if [ ! -d "${MEM_SOURCE}" ] || [ -z "$(ls ${MEM_SOURCE}/*.md 2>/dev/null)" ]; then
+  MEM_SOURCE="${SETUP_DIR}/vault/Memory"
+fi
+for f in "${MEM_SOURCE}"/*.md; do
   [ -f "$f" ] || continue
   cp "$f" "${PROJECT_MEM}/"
   mem_count=$((mem_count + 1))
 done
-echo "  ✓ ${mem_count} memory files restored to ${PROJECT_MEM}"
+echo "  ✓ ${mem_count} memory files restored to ${PROJECT_MEM} (from ${MEM_SOURCE})"
 
 # ── Restore CLAUDE.md files (from config/) ────────────────────────
 echo "→ Restoring CLAUDE.md files..."
