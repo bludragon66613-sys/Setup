@@ -4,14 +4,46 @@
 
 echo "=== Starting Core Services ==="
 
+# 0. Cleanup: kill orphaned node processes from previous sessions
+# All kills run inside PowerShell via Stop-Process to avoid:
+#   - Self-referential query matching (bash/powershell own process tree)
+#   - Unreliable SIGTERM delivery from Git Bash to Windows-native node.exe
+echo ""
+echo "[0/6] Process Cleanup..."
+CLEANUP_COUNT=$(powershell.exe -NoProfile -Command '
+  $killed = 0
+  # Kill orphaned claude-mem MCP servers (new ones spawn per session)
+  Get-CimInstance Win32_Process | Where-Object {
+    $_.Name -eq "node.exe" -and $_.CommandLine -like "*claude-mem*mcp-server*"
+  } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; $killed++ }
+  # Kill orphaned chrome-devtools-mcp processes (on-demand only now)
+  Get-CimInstance Win32_Process | Where-Object {
+    $_.Name -eq "node.exe" -and $_.CommandLine -like "*chrome-devtools-mcp*"
+  } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; $killed++ }
+  # Kill stale raw pnpm dev:server processes (PM2 manages Paperclip now)
+  Get-CimInstance Win32_Process | Where-Object {
+    $_.Name -eq "node.exe" -and (
+      $_.CommandLine -like "*pnpm*dev:server*" -or
+      $_.CommandLine -like "*pnpm*--filter*server*dev*"
+    ) -and $_.CommandLine -notlike "*pm2*"
+  } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; $killed++ }
+  Write-Output $killed
+' 2>/dev/null | tr -d '\r')
+
+if [ "${CLEANUP_COUNT:-0}" -gt 0 ]; then
+  echo -e "\e[33m[CLEANED]\e[0m Killed $CLEANUP_COUNT orphaned processes"
+else
+  echo -e "\e[32m[OK]\e[0m No orphaned processes found"
+fi
+
 # 1. OpenClaw
 echo ""
-echo "[1/4] OpenClaw..."
+echo "[1/6] OpenClaw..."
 bash ~/openclaw-healthcheck.sh 2>&1
 
 # 2. n8n (port 5678)
 echo ""
-echo "[2/5] n8n Workflow Automation..."
+echo "[2/6] n8n Workflow Automation..."
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz 2>/dev/null | grep -q 200; then
   echo -e "\e[32m[OK]\e[0m n8n already running on :5678"
 else
@@ -29,34 +61,37 @@ else
   done
 fi
 
-# 3. Paperclip (port 3100)
+# 3. Paperclip (port 3100) — managed by PM2, never raw pnpm
 echo ""
-echo "[3/5] Paperclip..."
+echo "[3/6] Paperclip (via PM2)..."
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:3100/api/health 2>/dev/null | grep -q 200; then
   echo -e "\e[32m[OK]\e[0m Paperclip already running on :3100"
 else
-  echo "Starting Paperclip..."
-  cd ~/paperclip && pnpm dev:server > /tmp/paperclip.log 2>&1 &
+  echo "Starting Paperclip via PM2..."
+  pm2 restart paperclip --update-env 2>/dev/null || {
+    echo "  First start — registering with PM2..."
+    pm2 start "pnpm dev:server" --name paperclip --cwd "$HOME/paperclip" 2>/dev/null
+  }
   for i in $(seq 1 15); do
     sleep 1
     if curl -s -o /dev/null -w "%{http_code}" http://localhost:3100/api/health 2>/dev/null | grep -q 200; then
-      echo -e "\e[32m[OK]\e[0m Paperclip started on :3100"
+      echo -e "\e[32m[OK]\e[0m Paperclip started on :3100 (PM2)"
       break
     fi
     if [ $i -eq 15 ]; then
-      echo -e "\e[31m[FAIL]\e[0m Paperclip failed to start — check /tmp/paperclip.log"
+      echo -e "\e[31m[FAIL]\e[0m Paperclip failed to start — check: pm2 logs paperclip"
     fi
   done
 fi
 
-# 3. NERV Dashboard (port 5555)
+# 4. NERV Dashboard (port 5555)
 echo ""
-echo "[4/5] NERV Dashboard..."
+echo "[4/6] NERV Dashboard..."
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:5555/ 2>/dev/null | grep -q 200; then
   echo -e "\e[32m[OK]\e[0m Dashboard already running on :5555"
 else
   echo "Starting Dashboard (webpack mode)..."
-  cd ~/aeon/dashboard && npx next dev --webpack --port 5555 > /tmp/dashboard.log 2>&1 &
+  (cd ~/aeon/dashboard && npx next dev --webpack --port 5555 > /tmp/dashboard.log 2>&1 &)
   for i in $(seq 1 20); do
     sleep 1
     if curl -s -o /dev/null -w "%{http_code}" http://localhost:5555/ 2>/dev/null | grep -q 200; then
