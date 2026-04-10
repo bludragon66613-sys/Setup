@@ -46,3 +46,4 @@
 - [feedback_openclaw_startup.md](feedback_openclaw_startup.md) — OpenClaw restart pitfalls: zombie shells, duplicate gateway instances
 - [feedback_backup.md](feedback_backup.md) — Back up agents and memory to claudecodemem after significant changes
 - [feedback_design_quality.md](feedback_design_quality.md) — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality
+- [feedback_obsidian_sync.md](feedback_obsidian_sync.md) — Always exclude shueb.io from Obsidian vault syncs
