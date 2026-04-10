@@ -202,6 +202,27 @@ function writeDailyNote() {
   return true;
 }
 
+function syncToGoogleDrive() {
+  const { execSync } = require('child_process');
+  try {
+    // Check if rclone is available and gdrive remote exists
+    const remotes = execSync('rclone listremotes', { timeout: 5000 }).toString();
+    if (!remotes.includes('gdrive:')) return 'no remote';
+
+    // Background sync — don't block the hook
+    const { spawn } = require('child_process');
+    const child = spawn('rclone', [
+      'copy', VAULT_BASE, 'gdrive:Agentic knowledge',
+      '--exclude', '.git/**',
+      '--exclude', '.obsidian/workspace.json',
+    ], { detached: true, stdio: 'ignore' });
+    child.unref();
+    return 'started';
+  } catch {
+    return 'skipped';
+  }
+}
+
 function main() {
   try {
     const synced = syncMemoryFiles();
@@ -214,10 +235,14 @@ function main() {
       fs.writeFileSync(MINDMAP_FILE, mindmap);
     }
 
+    // Mirror to Google Drive as backup
+    const gdriveStatus = syncToGoogleDrive();
+
     const parts = [`${synced.length} memory`];
     if (aeonCount > 0) parts.push(`${aeonCount} aeon logs`);
     if (claudeSynced) parts.push('CLAUDE.md');
-    process.stderr.write(`[memory-sync] Synced ${parts.join(' + ')} → Obsidian. MindMap.md updated.\n`);
+    const gdrivePart = gdriveStatus === 'started' ? ' + gdrive backup' : '';
+    process.stderr.write(`[memory-sync] Synced ${parts.join(' + ')} → Obsidian. MindMap.md updated.${gdrivePart}\n`);
   } catch (err) {
     process.stderr.write(`[memory-sync] Error: ${err.message}\n`);
   }
