@@ -1,36 +1,15 @@
 {
-  "_comment": "MCP server configurations — merged into ~/.claude.json by restore.sh",
   "mcpServers": {
-    "gitnexus": {
-      "command": "node",
-      "args": ["${NPM_GLOBAL_ROOT}/gitnexus/dist/cli/index.js", "mcp"],
-      "type": "stdio",
-      "install": "npm install -g gitnexus"
-    },
-    "qmd": {
-      "command": "node",
-      "args": ["${NPM_GLOBAL_ROOT}/@tobilu/qmd/dist/cli/qmd.js", "mcp"],
-      "install": "npm install -g @tobilu/qmd"
-    },
-    "pencil": {
-      "command": "${PENCIL_PATH}/resources/app.asar.unpacked/out/mcp-server-${PLATFORM}.exe",
-      "args": ["--app", "desktop"],
-      "env": {},
-      "type": "stdio",
-      "install": "Install Pencil desktop app from https://pencil.li"
-    },
-    "memory": {
+    "n8n-mcp": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "args": ["-y", "n8n-mcp"],
       "env": {
-        "MEMORY_FILE_PATH": "${HOME}/.claude/memory-graph/knowledge.json"
-      },
-      "type": "stdio",
-      "install": "Auto-installed via npx"
-    },
-    "claude-peers": {
-      "url": "http://localhost:7355/mcp",
-      "install": "Starts automatically via claude-peers-start.js hook"
+        "MCP_MODE": "stdio",
+        "N8N_API_URL": "http://localhost:5678",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZjYzMzEyZi1iMjZjLTQ3ZGItYmEwZS1jYTBkN2RhNGI1NjMiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiNDQxY2I2OTktZjMxOC00NzY2LWFjZWItMmZmOWZkYzNjN2M2IiwiaWF0IjoxNzc1NzczMTY0LCJleHAiOjE3NzgyOTkyMDB9.4IikZk7scqVbi3Fj7WHYmYeJRoFioW-2KJg-F3cLq_o",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true"
+      }
     }
   }
 }
