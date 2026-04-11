@@ -22,7 +22,7 @@
 - [project_lightrag.md](project_lightrag.md) — lightrag-vault: LightRAG knowledge graph over Obsidian vault, MCP server + CLI, 45 tests
 - [project_n8n.md](project_n8n.md) — n8n 2.15.0 on :5678 + n8n-mcp for Claude Code, workflow automation layer complementing OpenClaw/Paperclip
 
-## Session Savepoints (latest 5 — older ones in _archive/)
+## Session Savepoints (latest 5 — 27 older ones in _archive/)
 - [session_savepoint_2026-04-08b.md](session_savepoint_2026-04-08b.md) — Ecosystem audit: 9 component updates, OpenClaw 2026.4.9
 - [session_savepoint_2026-04-08.md](session_savepoint_2026-04-08.md) — LightRAG vault project docs, ingestion paused pending API credits
 - [session_savepoint_2026-03-27.md](session_savepoint_2026-03-27.md) — TallyAI hardening: 15 security fixes, Upstash Redis, 345 tests

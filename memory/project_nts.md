@@ -33,8 +33,20 @@ AI anime production studio producing short-form anime series (1.5-3.5 min episod
 - **URL:** https://nts-ashen.vercel.app
 - **Project:** NTS under bludragon66613-sys-projects
 
-## First IP
-- **Chakra** — artbook at ~/Downloads/Telegram Desktop/Chakra Artbook.pdf
+## Series in Development
+
+### PACK (パック) — Second IP, first to enter scripting
+- **Based on:** Viral March 2026 story of 7 dogs escaping dog thieves in Jilin, China (230M views)
+- **Format:** 60 episodes, 2-3 min each, 9:16 vertical
+- **Tone:** Wolf's Rain meets Homeward Bound — emotional survival drama, no dialogue
+- **Characters:** Dapang (Corgi leader), Sibao (German Shepherd warrior), Jin (Golden Retriever guardian), Bao (Labrador heart), Lao Bai (Pekinese elder), Kuai (mutt scout), Xiao (puppy youngest)
+- **Slash color:** #4A90D9 (Pack Blue)
+- **Series bible:** `~/nts-production/series/pack/series-bible.md`
+- **Status:** Series bible complete (story architecture, character profiles, world-building). Next: Episode 1 script.
+
+### Chakra — First IP (flagship)
+- **Artbook:** ~/Downloads/Telegram Desktop/Chakra Artbook.pdf
+- **Status:** Artbook complete, needs series bible extraction
 
 ## PDF TODO
 - PDF brand bible has alignment issues — needs rebuild with proper PDF library (pdf-lib or React-PDF)
