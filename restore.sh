@@ -191,6 +191,32 @@ if command -v gh &>/dev/null; then
 fi
 echo "  ✓ ${pm_count} PM skills restored"
 
+# ── Restore Custom Skills (from Setup/skills/) ────────────────────
+# Skills authored locally and backed up to this repo. Each skill is a
+# directory under Setup/skills/<name>/ containing SKILL.md plus any
+# helper scripts. Restored verbatim into ~/.claude/skills/<name>/.
+echo "→ Restoring custom skills..."
+custom_count=0
+if [ -d "${SETUP_DIR}/skills" ]; then
+  for skill_dir in "${SETUP_DIR}/skills"/*/; do
+    [ -d "${skill_dir}" ] || continue
+    skill_name="$(basename "${skill_dir}")"
+    dest="${CLAUDE_HOME}/skills/${skill_name}"
+    mkdir -p "${dest}"
+    # Copy every file from the skill dir (SKILL.md + helper scripts).
+    for f in "${skill_dir}"/*; do
+      [ -f "$f" ] || continue
+      cp "$f" "${dest}/"
+      # Mark Python / shell helpers executable.
+      case "$f" in
+        *.py|*.sh) chmod +x "${dest}/$(basename "$f")" 2>/dev/null || true ;;
+      esac
+    done
+    custom_count=$((custom_count + 1))
+  done
+fi
+echo "  ✓ ${custom_count} custom skills restored"
+
 # ── Configure MCP Servers ────────────────────────────────────────
 echo "→ Configuring MCP servers..."
 CLAUDE_JSON="${HOME}/.claude.json"
@@ -233,11 +259,12 @@ echo "╔═══════════════════════�
 echo "║  Restore Complete                         ║"
 echo "╚═══════════════════════════════════════════╝"
 echo ""
-echo "  Agents:    ${agent_count} (22 root + subdirectories)"
-echo "  Hooks:     ${hook_count}"
-echo "  Rules:     ${rule_count}"
-echo "  Memory:    ${mem_count}"
-echo "  PM Skills: ${pm_count}"
+echo "  Agents:        ${agent_count} (22 root + subdirectories)"
+echo "  Hooks:         ${hook_count}"
+echo "  Rules:         ${rule_count}"
+echo "  Memory:        ${mem_count}"
+echo "  PM Skills:     ${pm_count}"
+echo "  Custom Skills: ${custom_count}"
 echo ""
 echo "── Next Steps ──────────────────────────────"
 echo ""
