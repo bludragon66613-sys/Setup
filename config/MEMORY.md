@@ -7,12 +7,12 @@
 
 ## Projects
 - [project_signal.md](project_signal.md) — SIGNAL consultancy: GTM, pricing, brand architecture, dual-market strategy
-- [project_nerv.md](project_nerv.md) — NERV_02 and nerv-dashboard context, stack, Vercel deployment
+- [project_nerv.md](project_nerv.md) — NERV_02/Aeon: Phase 2 affective memory pipeline shipped 2026-04-15, 54 skills, full daily cron flow, 14-day eval streak exit criterion
 - [project_openclaw.md](project_openclaw.md) — OpenClaw local AI gateway: config, auth, startup, token refresh
 - [project_virama.md](project_virama.md) — Virama by SSquare branding project, all file locations, brand facts
 - [project_aigency02.md](project_aigency02.md) — Aigency02 agent repo, superpowers integration, restore instructions
 - [project_rei.md](project_rei.md) — Rei AI VTuber + Solana token launcher (~/companion/), forked from AIRI
-- [project_paperclip.md](project_paperclip.md) — Paperclip AI: open-source agent orchestration platform at ~/paperclip
+- [project_paperclip.md](project_paperclip.md) — Paperclip AI: open-source agent orchestration platform at ~/paperclip. **PR #3746 open** (11-pass cleanup branch, −2,440 lines, 16→7 cycles)
 - [project_tallyai.md](project_tallyai.md) — TallyAI: AI accounting intelligence for Indian SMEs, Tally XML parser + dashboard
 - [project_munshi_brand.md](project_munshi_brand.md) — Munshi brand bible v3.0: Direction A Stripe Neelam, no Devanagari, repo renamed to Munshi
 - [project_omc.md](project_omc.md) — oh-my-claudecode v4.9.3: multi-agent orchestration, smart model routing, autopilot/ralph modes
@@ -21,16 +21,20 @@
 - [project_dexfolioexp_design.md](project_dexfolioexp_design.md) — DexFolioExp design direction and UI decisions
 - [project_lightrag.md](project_lightrag.md) — lightrag-vault: LightRAG knowledge graph over Obsidian vault, MCP server + CLI, 45 tests
 - [project_n8n.md](project_n8n.md) — n8n 2.15.0 on :5678 + n8n-mcp for Claude Code, workflow automation layer complementing OpenClaw/Paperclip
+- [project_furniture_design_tool.md](project_furniture_design_tool.md) — kitchenandwardrobe: Next.js 16 layout generator, Phase 6 quality toggle + inspiration refs shipped 2026-04-13, 281 tests, on master
+- [project_wiki_automation.md](project_wiki_automation.md) — **DEFERRED.** 3-layer plan (n8n cron + SessionEnd hook + OpenClaw) to automate /wiki-ingest /wiki-lint /wiki-digest against the Obsidian vault. Picks up from 2026-04-15 session.
 
-## Session Savepoints (latest 5 — older ones in _archive/)
+## Session Savepoints (latest 5 — 28 older ones in _archive/)
+- [session_savepoint_2026-04-15.md](session_savepoint_2026-04-15.md) — Marathon: Paperclip PR #3746 (11 cleanup passes, −2,440 lines, 16→7 cycles), Aeon Phase 2 affective memory (8 commits, full pipeline), Aeon hygiene (3 commits), security incident with 3 token rotations
+- [session_savepoint_2026-04-14.md](session_savepoint_2026-04-14.md) — elevatex: Phase 4e.3 retry endpoint shipped + 12 prod-config bugs fixed end-to-end (blob token, middleware, parser URL, DWG reject, shapely polygonize, QStash EU region, Upstash env hygiene, worker public route)
+- [session_savepoint_2026-04-13.md](session_savepoint_2026-04-13.md) — anime-db into NTS monorepo, multi-source screencap fetcher, 120/120 real k-means palettes
 - [session_savepoint_2026-04-08b.md](session_savepoint_2026-04-08b.md) — Ecosystem audit: 9 component updates, OpenClaw 2026.4.9
 - [session_savepoint_2026-04-08.md](session_savepoint_2026-04-08.md) — LightRAG vault project docs, ingestion paused pending API credits
 - [session_savepoint_2026-03-27.md](session_savepoint_2026-03-27.md) — TallyAI hardening: 15 security fixes, Upstash Redis, 345 tests
 - [session_savepoint_2026-03-26d.md](session_savepoint_2026-03-26d.md) — TallyAI MVP: full build, Munshi brand, Vercel deploy
-- [session_savepoint_2026-03-26c.md](session_savepoint_2026-03-26c.md) — SIGNAL consultancy: full GTM, pricing, brand, 25-slide deck
 
 ## Stalled
-- NERV Desktop app (Tauri+React) — brainstorm done Mar 24, spec not written (17 days stale)
+- NERV Desktop app (Tauri+React) — superseded by Kaneda Eye (same Tauri+React stack, broader scope)
 
 ## Reference
 - [reference_skill_graphs.md](reference_skill_graphs.md) — Skill graph architecture: 11 domain MOCs in _mocs/ connecting 285 skills via wikilinks (arscontexta pattern)
@@ -47,3 +51,12 @@
 - [feedback_backup.md](feedback_backup.md) — Back up agents and memory to claudecodemem after significant changes
 - [feedback_design_quality.md](feedback_design_quality.md) — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality
 - [feedback_obsidian_sync.md](feedback_obsidian_sync.md) — Always exclude shueb.io from Obsidian vault syncs
+- [feedback_pdf_quality.md](feedback_pdf_quality.md) — HTML-to-PDF via Puppeteer is sloppy; use proper PDF libs, always visually review, build PDF review skill
+- [feedback_ai_design_antipatterns.md](feedback_ai_design_antipatterns.md) — 9 vibe-coded UI anti-patterns to never generate: icon boxes, glassmorphism, gradient abuse, nested cards, broken animations
+- [feedback_openclaw_glm_routing.md](feedback_openclaw_glm_routing.md) — GLM on OpenClaw: free OR tier caps max_tokens under runtime default; only glm-4.5-air:free works free, paid GLMs silently fall back
+- [feedback_secret_handling.md](feedback_secret_handling.md) — Never Edit/Write/Read files containing secrets — Claude Code's file-change notification echoes contents into session jsonl, creating a leak loop (lesson from 3-rotation incident 2026-04-15)
+
+## Projects (New)
+- [project_nts.md](project_nts.md) — Neo Tokyo Studios: AI anime production house, brand bible complete, Vercel deployed
+- [project_kaneda_eye.md](project_kaneda_eye.md) — Kaneda Eye: Tauri 2 screen-aware AI companion + voice command layer, scaffold complete
+- [project_cos.md](project_cos.md) — Chief of Staff: Obsidian vault overlay for actions, decisions, clients, transcripts, frameworks

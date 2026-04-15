@@ -24,9 +24,20 @@ set -euo pipefail
 CLAUDE_HOME="${HOME}/.claude"
 SETUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# ── Platform detection ─────────────────────────────────────────────
+# OS_KIND ∈ {windows, macos, linux}. Used to skip platform-specific files.
+case "$OSTYPE" in
+  msys*|cygwin*|win32*) OS_KIND="windows" ;;
+  darwin*)              OS_KIND="macos" ;;
+  linux*)               OS_KIND="linux" ;;
+  *)                    OS_KIND="unknown" ;;
+esac
+
 echo "╔═══════════════════════════════════════════╗"
 echo "║  Claude Code Setup — Full Restore         ║"
 echo "╚═══════════════════════════════════════════╝"
+echo ""
+echo "  Platform: ${OS_KIND} (\$OSTYPE=${OSTYPE})"
 echo ""
 
 # ── Pre-flight checks ──────────────────────────────────────────────
@@ -109,8 +120,8 @@ echo "  ✓ Settings restored (hooks, plugins, effort level)"
 
 # ── Restore Memory (from vault/Memory/) ───────────────────────────
 echo "→ Restoring memory..."
-# Memory path varies by OS: Windows uses C--Users-X, macOS uses Users-X
-if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+# Memory path varies by OS: Windows uses C--Users-X, macOS/Linux uses Users-X
+if [ "${OS_KIND}" = "windows" ]; then
   PROJECT_MEM="${CLAUDE_HOME}/projects/C--Users-$(whoami)/memory"
 else
   PROJECT_MEM="${CLAUDE_HOME}/projects/Users-$(whoami)/memory"
@@ -143,12 +154,34 @@ fi
 # ── Restore Scripts ────────────────────────────────────────────────
 echo "→ Restoring utility scripts..."
 if [ -d "${SETUP_DIR}/scripts" ]; then
+  script_copied=0
+  script_skipped=0
   for f in "${SETUP_DIR}/scripts"/*; do
     [ -f "$f" ] || continue
+    base="$(basename "$f")"
+    # Skip Windows-only scripts on non-Windows platforms
+    if [ "${OS_KIND}" != "windows" ]; then
+      case "$base" in
+        *.ps1|*.bat|*.cmd)
+          echo "  ⊘ Skipping ${base} (Windows-only)"
+          script_skipped=$((script_skipped + 1))
+          continue
+          ;;
+      esac
+    fi
     cp "$f" "${HOME}/"
-    chmod +x "${HOME}/$(basename "$f")" 2>/dev/null || true
+    chmod +x "${HOME}/${base}" 2>/dev/null || true
+    script_copied=$((script_copied + 1))
   done
-  echo "  ✓ Scripts restored to ~/"
+  echo "  ✓ ${script_copied} scripts restored to ~/ (${script_skipped} skipped as Windows-only)"
+
+  # Warn about PowerShell-dependent bash scripts on macOS/Linux
+  if [ "${OS_KIND}" != "windows" ] && [ -f "${HOME}/startup-services.sh" ] && \
+     grep -q "powershell.exe" "${HOME}/startup-services.sh" 2>/dev/null; then
+    echo "  ⚠ ~/startup-services.sh uses PowerShell for process cleanup."
+    echo "     On macOS/Linux, rewrite the powershell.exe blocks as pkill equivalents,"
+    echo "     or start services (OpenClaw, Paperclip, Dashboard) manually."
+  fi
 fi
 
 # ── Install Global Tools ──────────────────────────────────────────
@@ -268,6 +301,14 @@ echo "  Custom Skills: ${custom_count}"
 echo ""
 echo "── Next Steps ──────────────────────────────"
 echo ""
+if [ "${OS_KIND}" != "windows" ]; then
+  echo "  ⚠ macOS/Linux: one SessionStart hook in ~/.claude/settings.json invokes"
+  echo "     powershell.exe — it will fail silently on every session start."
+  echo "     Edit settings.json and remove or comment the hook whose command"
+  echo "     contains \"dedup-claude-mem-mcp.ps1\". See README \"PowerShell-dependent"
+  echo "     scripts\" section for details."
+  echo ""
+fi
 echo "  1. Start Claude Code and install plugins + skills:"
 echo "     claude"
 echo "     > /configure-ecc     # Install Everything Claude Code skills"
@@ -282,9 +323,19 @@ echo "  3. Index repos with GitNexus:"
 echo "     gitnexus analyze ~/your-project"
 echo ""
 echo "  4. Set up QMD vault search:"
-echo "     qmd collection add vault ~/OneDrive/Documents/your-vault && qmd embed"
+if [ "${OS_KIND}" = "macos" ]; then
+  echo "     qmd collection add vault ~/Library/CloudStorage/OneDrive-Personal/Documents/your-vault && qmd embed"
+  echo "     # or if not using OneDrive: qmd collection add vault ~/Documents/your-vault && qmd embed"
+else
+  echo "     qmd collection add vault ~/OneDrive/Documents/your-vault && qmd embed"
+fi
 echo ""
 echo "  5. (Optional) Start services:"
-echo "     bash ~/startup-services.sh"
+if [ "${OS_KIND}" = "windows" ]; then
+  echo "     bash ~/startup-services.sh"
+else
+  echo "     # startup-services.sh uses PowerShell — rewrite for macOS/Linux"
+  echo "     # or start services (OpenClaw, Paperclip, Dashboard) manually"
+fi
 echo ""
 echo "  Done! Your Claude Code environment is ready."
