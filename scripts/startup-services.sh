@@ -12,10 +12,15 @@ echo ""
 echo "[0/6] Process Cleanup..."
 CLEANUP_COUNT=$(powershell.exe -NoProfile -Command '
   $killed = 0
-  # Kill orphaned claude-mem MCP servers (new ones spawn per session)
-  Get-CimInstance Win32_Process | Where-Object {
+  # Dedup claude-mem MCP servers (keep oldest, kill duplicates)
+  $mcps = @(Get-CimInstance Win32_Process | Where-Object {
     $_.Name -eq "node.exe" -and $_.CommandLine -like "*claude-mem*mcp-server*"
-  } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; $killed++ }
+  } | Sort-Object CreationDate)
+  if ($mcps.Count -gt 1) {
+    $mcps | Select-Object -Skip 1 | ForEach-Object {
+      Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; $killed++
+    }
+  }
   # Kill orphaned chrome-devtools-mcp processes (on-demand only now)
   Get-CimInstance Win32_Process | Where-Object {
     $_.Name -eq "node.exe" -and $_.CommandLine -like "*chrome-devtools-mcp*"

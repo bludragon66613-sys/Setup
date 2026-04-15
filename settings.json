@@ -27,6 +27,17 @@
             "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/session-start.mjs\""
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'sleep 20 && powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:/Users/Rohan/.claude/scripts/dedup-claude-mem-mcp.ps1'",
+            "async": true,
+            "timeout": 60
+          }
+        ]
       }
     ],
     "PostToolUse": [
