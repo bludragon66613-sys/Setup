@@ -11,22 +11,30 @@
 
 ```
 vault/
-├── raw/              # Layer 1: Immutable source documents (never edited)
-├── wiki/             # Layer 2: LLM-maintained synthesis (Claude owns this)
-│   ├── articles/     # Deep-dive pages on projects, systems, ideas
-│   ├── entities/     # People, tools, companies, frameworks
-│   ├── concepts/     # Cross-cutting ideas and patterns
-│   └── summaries/    # Periodic landscape snapshots
-├── WIKI_SCHEMA.md    # Layer 3: This file — conventions and workflows
-├── index.md          # Flat catalog of every file
-├── log.md            # Append-only changelog
-└── MOC.md            # Master navigation (entry point)
+├── raw/                   # Layer 1: Immutable source documents (never edited)
+├── wiki/                  # Layer 2: LLM-maintained synthesis (Claude owns this)
+│   ├── articles/          # Deep-dive pages on projects, systems, ideas
+│   ├── entities/          # People, tools, companies, frameworks
+│   ├── concepts/          # Cross-cutting ideas and patterns
+│   └── summaries/         # Periodic landscape snapshots
+├── brand-foundation/      # Layer 0 (BF): Static identity — READ-ONLY for agents
+│   ├── README.md          # BF index, rules, consult order
+│   ├── brands/            # Per-brand rules, tokens, dos and donts
+│   ├── design-standards.md
+│   ├── design-antipatterns.md
+│   ├── pdf-quality.md
+│   └── voice-rules.md
+├── WIKI_SCHEMA.md         # Layer 3: This file — conventions and workflows
+├── index.md               # Flat catalog of every file
+├── log.md                 # Append-only changelog
+└── MOC.md                 # Master navigation (entry point)
 ```
 
 ### Ownership Rules
 
 | Layer | Owner | Mutability |
 |-------|-------|------------|
+| `brand-foundation/` | **Human only** | **Read-only for agents.** Agents must never edit these files. Consult before creative output. |
 | `raw/` | Hook + human | Immutable after creation — never edit raw sources |
 | `wiki/` | Claude | Claude creates, updates, and cross-references all pages |
 | `index.md` | Claude | Updated on every ingest |
@@ -198,22 +206,45 @@ Output: structured report with severity (critical/warning/info) and suggested fi
 
 All wiki pages must have:
 - `title:` — human-readable
-- `type:` — one of: article, entity, concept, summary
+- `type:` — one of: article, entity, concept, summary, output
 - `created:` — YYYY-MM-DD
 - `updated:` — YYYY-MM-DD (bumped on any edit)
+- `explored:` — `false` on creation. Only `/wiki-explore` (human validation gate) may set it to `true`.
+- `confidence:` — one of: `high`, `medium`, `low`, `uncertain`. Reflects how well-supported the page content is.
 
 Articles must additionally have:
 - `sources:` — list of raw file wikilinks
 - `tags:` — list of lowercase tags
 - `entities:` — list of entity slugs mentioned
+- `counter_arguments:` — list of counter-points to claims on this page. Minimum 2 on any article/concept/synthesis. If fewer, set `confidence: uncertain`.
+- `data_gaps:` — list of what's missing from the picture that would strengthen the page.
+
+Outputs (`wiki/outputs/*.md`, filed from `/wiki-query`) must have:
+- `type: output`
+- `sources:` — wikilinks to pages cited in the answer
+- `explored: false` — starts unreviewed
+
+---
+
+## Bias-check sections
+
+Every new `article`, `concept`, or `synthesis` page body must include:
+- `## Counter-arguments` — at least 2 substantive counter-points, or the page is flagged `confidence: uncertain`
+- `## Data gaps` — what the wiki does not yet know about this topic that would matter
+
+These sections are enforced by `/wiki-lint`. Pages missing them raise a warning.
 
 ---
 
 ## What Claude Should Never Do
 
+- Edit files in `brand-foundation/` — this is the static identity layer, read-only for agents
 - Edit files in `raw/` — these are immutable source documents
 - Delete wiki pages without human approval
 - Create pages outside the defined directory structure
 - Skip updating `index.md` and `log.md` after changes
 - Use dates in filenames (use frontmatter instead)
 - Create stub pages with no real content (minimum: 1 paragraph + frontmatter)
+- Set `explored: true` on any page — only `/wiki-explore` with human confirmation may do this
+- Create an article/concept page without `## Counter-arguments` and `## Data gaps` sections
+- File BF content as a wiki page — the BF layer and the wiki layer must stay separate
