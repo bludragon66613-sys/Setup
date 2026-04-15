@@ -36,10 +36,10 @@ Agent orchestration platform on :3100. Managed via PM2 (`pm2 restart paperclip`)
 ### claudecodemem + Setup
 Backup repos. Push after significant changes.
 - **claudecodemem**: github.com/bludragon66613-sys/claudecodemem — agents + memory
-- **Setup**: github.com/bludragon66613-sys/Setup — 24 active + 71 archived agents, hooks, rules, scripts, config
+- **Setup**: github.com/bludragon66613-sys/Setup — 55 active + 183 archived agents, hooks, rules, scripts, config
 
 ## Available Agents
-24 active agents in `~/.claude/agents/`. 71 more in `_archived/` — pull back with `cp` when needed.
+55 active agents in `~/.claude/agents/`. 183 more in `~/Setup/agents/_archived/` — pull back with `cp` when needed.
 
 | Agent | Purpose |
 |-------|---------|
