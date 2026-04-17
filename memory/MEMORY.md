@@ -25,6 +25,7 @@
 - [project_wiki_automation.md](project_wiki_automation.md) — **DEFERRED.** 3-layer plan (n8n cron + SessionEnd hook + OpenClaw) to automate /wiki-ingest /wiki-lint /wiki-digest against the Obsidian vault. Picks up from 2026-04-15 session.
 
 ## Session Savepoints (latest 5 — 28 older ones in _archive/)
+- [session_savepoint_2026-04-18.md](session_savepoint_2026-04-18.md) — Morning Light marathon: 7 ops docs (empanelment, tier1, price sheet, P&L tracker, case study), Telegram chatbot + monorepo integration at `bot/`, unified nav + docs hub, Singularity→Morning Light rebrand, A4 overlap fix, `.vercelignore` 404 fix, 3 commits pushed + prod deploy verified
 - [session_savepoint_2026-04-15.md](session_savepoint_2026-04-15.md) — Marathon: Paperclip PR #3746 (11 cleanup passes, −2,440 lines, 16→7 cycles), Aeon Phase 2 affective memory (8 commits, full pipeline), Aeon hygiene (3 commits), security incident with 3 token rotations
 - [session_savepoint_2026-04-14.md](session_savepoint_2026-04-14.md) — elevatex: Phase 4e.3 retry endpoint shipped + 12 prod-config bugs fixed end-to-end (blob token, middleware, parser URL, DWG reject, shapely polygonize, QStash EU region, Upstash env hygiene, worker public route)
 - [session_savepoint_2026-04-13.md](session_savepoint_2026-04-13.md) — anime-db into NTS monorepo, multi-source screencap fetcher, 120/120 real k-means palettes
@@ -55,9 +56,12 @@
 - [feedback_ai_design_antipatterns.md](feedback_ai_design_antipatterns.md) — 9 vibe-coded UI anti-patterns to never generate: icon boxes, glassmorphism, gradient abuse, nested cards, broken animations
 - [feedback_openclaw_glm_routing.md](feedback_openclaw_glm_routing.md) — GLM on OpenClaw: free OR tier caps max_tokens under runtime default; only glm-4.5-air:free works free, paid GLMs silently fall back
 - [feedback_secret_handling.md](feedback_secret_handling.md) — Never Edit/Write/Read files containing secrets — Claude Code's file-change notification echoes contents into session jsonl, creating a leak loop (lesson from 3-rotation incident 2026-04-15)
+- [feedback_design_process.md](feedback_design_process.md) — Before any visual surface: read the project brand bible + study an existing component. Inline styles against a generic dark palette produces trash.
 
 ## Projects (New)
 - [project_nts.md](project_nts.md) — Neo Tokyo Studios: AI anime production house, brand bible complete, Vercel deployed
 - [project_kaneda_eye.md](project_kaneda_eye.md) — Kaneda Eye: Tauri 2 screen-aware AI companion + voice command layer, scaffold complete
 - [project_cos.md](project_cos.md) — Chief of Staff: Obsidian vault overlay for actions, decisions, clients, transcripts, frameworks
 - [project_autoresearch.md](project_autoresearch.md) — Autoresearch: karpathy-style experiment loop ported from davebcn87/pi-autoresearch, wired into NERV dashboard + Aeon skill-evolve + n8n cron + Obsidian sync
+- [project_drip.md](project_drip.md) — **drip** (rebranded from "DRIP Protocol" 2026-04-17): peptide creator-brand platform at drip.markets, AI discovery + creator storefronts + MD-pharmacy rails + $DRIP token. Domain secured. With Matteo (cybergenesis621).
+- [project_morning_light.md](project_morning_light.md) — **Morning Light Energy** (was "Singularity Energy" pre-2026-04-17): AI-powered Premier-backed rooftop solar EPC in TG+AP, `morning-light-energy` repo, `morninglight.energy` domain. 5-phase plan (residential → district aggregator → C&I → platform → utility 10MW).
