@@ -114,3 +114,5 @@ Bootstrapped + close network. No VC. Phase-5 utility capex may take project-fina
 - Brand amber is `#C8982F` (Morning Light), NOT `#D98310` (old Singularity accent)
 - `index.html` is a premium hand-crafted Tailwind landing — do not scaffold-overwrite it
 - A4 print pages (`deck/one-pager.html`, `ops/quote-template.html`) must NOT carry the sticky nav/footer — they break the print layout (see `design-audit.md`)
+- `deck/intro-deck.html` (reveal.js) also must NOT carry the shared nav — the body padding-top collapses reveal's viewport math and only the first slide renders. Use the floating `.deck-back` pill pattern instead.
+- `.vercelignore` gotcha: directory excludes silently prune the entire subtree from deployment, even if Git tracks them. Was the cause of 404s on deck/ops/gov subpath routes. Always verify a fresh prod URL with curl after the first deploy.

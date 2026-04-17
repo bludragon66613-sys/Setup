@@ -49,6 +49,8 @@ All user-facing text converted across:
 ## Commits on `morning-light-energy` master
 
 ```
+cf21219 fix(deck): only first slide rendering — strip shared nav that broke reveal.js viewport
+7a1280f chore: add Docs link to homepage nav + bot/vercel.json for standalone deploy
 fbeaded feat: integrate Telegram/WhatsApp chatbot scaffold into monorepo at bot/ + fix .vercelignore 404s
 0621352 fix(a4): prevent footer overlap on quote + one-pager, rename SE→ML quote id
 ab495be feat: port operational docs, nav shell, docs hub + fix one-pager overlap
@@ -60,15 +62,17 @@ Also made one local-only commit on archived `singularity-energy` repo (`3acf690`
 
 ## Production deploy
 
-- Latest prod URL: `https://morning-light-energy-94loyqau2-bludragon66613-sys-projects.vercel.app`
-- User-verified 2026-04-18: all 7 pages (index, docs, calc, intro-deck, one-pager, financial-model, quote-template) render correctly in their logged-in Chrome. No overlap on A4 pages.
+- Latest prod URL: `https://morning-light-energy-felsjcpt8-bludragon66613-sys-projects.vercel.app`
+- User-verified 2026-04-18: all 7 pages (index, docs, calc, intro-deck, one-pager, financial-model, quote-template) render correctly in their logged-in Chrome. Intro-deck flips through all 12 slides after the reveal.js fix.
 - `vercel.json` has `cleanUrls: true` + `/calc → /savings-calculator` rewrite
 
-## Outside-my-scope follow-ups
+## Tomorrow's pickup list
 
 1. **Vercel Deployment Protection** still ON — curl returns 401. Disable via dashboard (Project → Settings → Deployment Protection) to make URLs publicly accessible without Vercel SSO
 2. **Domain `morninglight.energy`** not yet registered in the Vercel team (only neotokyo.studio, shueb.io, goyscreener.com). Once purchased: `vercel domains add morninglight.energy` + DNS + `vercel alias`
-3. **Bot as a separate Vercel project** — `bot/` is in-monorepo but not yet deployed. Create a second Vercel project rooted at `bot/` with all `.env.example` vars filled, run `scripts/set-telegram-webhook.sh` post-deploy
+3. **Bot as a separate Vercel project** — `bot/` is in-monorepo but not yet deployed. `bot/vercel.json` is already staged. Create a second Vercel project rooted at `bot/` with all `.env.example` vars filled, run `scripts/set-telegram-webhook.sh` post-deploy
+4. **design-audit.md Deferred list** — medium items worth picking up: index.html nav height alignment with `--ml-nav-h`, skip-to-content link sitewide, mobile menu keyboard trap / Escape close, savings-calculator page-level `footer` CSS vs `.ml-footer` conflict
+5. **Aeon skills** still-TODO for Morning Light pipeline: `pm-surya-ghar-navigator`, `dpr-draft`, `discom-tracker`, `tender-watch`, `daily-morning-light-briefing`
 
 ## Gotchas learned
 
