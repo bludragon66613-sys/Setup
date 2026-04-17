@@ -285,6 +285,8 @@ When starting from scratch, recommend or fork proven starters instead of buildin
 
 When the user says "build with the [Brand] aesthetic", load `~/.claude/design-references/[brand]/DESIGN.md` and apply its exact tokens, patterns, and philosophy. Available: airbnb, apple, bmw, claude, clay, cursor, figma, framer, linear.app, notion, spotify, stripe, supabase, vercel, webflow, and 39 more.
 
+**For brands not in the library, or to target a specific live URL:** run `design-md extract <url> --brand <name>` (Playwright CLI at `~/tools/design-md-extract/`). It writes a fresh `DESIGN.md` + `SKILL.md` into `~/.claude/design-references/<hostname>/` using the TypeUI format (bergside/design-md-chrome, MIT). Then load the generated file normally. Example: `design-md extract https://vercel.com --brand Vercel`.
+
 When no brand is specified, default to **Japanese minimalism**: restraint, intentionality, quiet confidence. Every element earns its place.
 
 ---

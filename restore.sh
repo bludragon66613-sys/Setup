@@ -203,6 +203,31 @@ else
   echo "  ⚠ npm not found — skip global tool installation"
 fi
 
+# ── Restore local tools (~/tools) ─────────────────────────────────
+echo "→ Restoring local tools..."
+if [ -d "${SETUP_DIR}/tools" ]; then
+  mkdir -p "${HOME}/tools"
+  cp -R "${SETUP_DIR}/tools/." "${HOME}/tools/"
+  echo "  ✓ Copied ${SETUP_DIR}/tools → ~/tools"
+
+  if [ -d "${HOME}/tools/design-md-extract" ] && command -v npm &>/dev/null; then
+    echo "  → Installing design-md-extract dependencies..."
+    ( cd "${HOME}/tools/design-md-extract" && npm install --no-audit --no-fund >/dev/null 2>&1 \
+      && npx playwright install chromium >/dev/null 2>&1 ) \
+      && echo "  ✓ design-md-extract ready" \
+      || echo "  ⚠ design-md-extract deps failed (run npm install manually)"
+  fi
+fi
+
+# ── Restore ~/bin shims ───────────────────────────────────────────
+if [ -d "${SETUP_DIR}/bin" ]; then
+  echo "→ Restoring ~/bin shims..."
+  mkdir -p "${HOME}/bin"
+  cp -R "${SETUP_DIR}/bin/." "${HOME}/bin/"
+  chmod +x "${HOME}/bin/"* 2>/dev/null || true
+  echo "  ✓ Copied ${SETUP_DIR}/bin → ~/bin"
+fi
+
 # ── Restore PM Skills (65 from phuryn/pm-skills) ──────────────────
 echo "→ Restoring PM skills..."
 pm_count=0

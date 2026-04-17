@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Shim: design-md → node cli.mjs
+exec node "$HOME/tools/design-md-extract/cli.mjs" "$@"

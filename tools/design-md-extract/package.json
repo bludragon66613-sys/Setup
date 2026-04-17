@@ -1,0 +1,12 @@
+{
+  "name": "design-md-extract",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "design-md": "./cli.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}
