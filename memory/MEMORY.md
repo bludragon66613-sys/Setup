@@ -60,3 +60,4 @@
 - [project_nts.md](project_nts.md) — Neo Tokyo Studios: AI anime production house, brand bible complete, Vercel deployed
 - [project_kaneda_eye.md](project_kaneda_eye.md) — Kaneda Eye: Tauri 2 screen-aware AI companion + voice command layer, scaffold complete
 - [project_cos.md](project_cos.md) — Chief of Staff: Obsidian vault overlay for actions, decisions, clients, transcripts, frameworks
+- [project_autoresearch.md](project_autoresearch.md) — Autoresearch: karpathy-style experiment loop ported from davebcn87/pi-autoresearch, wired into NERV dashboard + Aeon skill-evolve + n8n cron + Obsidian sync

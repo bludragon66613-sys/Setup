@@ -1,0 +1,95 @@
+{
+  "name": "Autoresearch Nightly",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 2
+            }
+          ]
+        }
+      },
+      "id": "cron-trigger",
+      "name": "Daily 02:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "command": "bash \"${HOME}/.claude/skills/autoresearch/lib/nightly_iterate.sh\" 2>&1"
+      },
+      "id": "run-orchestrator",
+      "name": "Run nightly_iterate.sh",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.exitCode }}",
+              "operation": "notEqual",
+              "value2": "0"
+            }
+          ]
+        }
+      },
+      "id": "check-exit",
+      "name": "Failed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "command": "echo \"[autoresearch-nightly] run finished at $(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> \"${HOME}/.n8n/autoresearch-nightly.log\""
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [960, 200]
+    },
+    {
+      "parameters": {
+        "command": "bash -c 'OUTPUT=$(cat); echo \"[autoresearch-nightly][FAIL] $(date -u +%Y-%m-%dT%H:%M:%SZ): $OUTPUT\" >> \"${HOME}/.n8n/autoresearch-nightly.log\"' <<< \"={{ $node[\"Run nightly_iterate.sh\"].json.stdout }}\""
+      },
+      "id": "log-failure",
+      "name": "Log Failure",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [960, 400]
+    }
+  ],
+  "connections": {
+    "Daily 02:00": {
+      "main": [
+        [{ "node": "Run nightly_iterate.sh", "type": "main", "index": 0 }]
+      ]
+    },
+    "Run nightly_iterate.sh": {
+      "main": [
+        [{ "node": "Failed?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Failed?": {
+      "main": [
+        [{ "node": "Log Failure", "type": "main", "index": 0 }],
+        [{ "node": "Log Success", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": ["autoresearch", "nightly"],
+  "meta": {
+    "instanceId": "autoresearch-nightly-v1"
+  }
+}
