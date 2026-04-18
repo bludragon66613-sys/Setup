@@ -25,6 +25,8 @@
 - [project_wiki_automation.md](project_wiki_automation.md) — **DEFERRED.** 3-layer plan (n8n cron + SessionEnd hook + OpenClaw) to automate /wiki-ingest /wiki-lint /wiki-digest against the Obsidian vault. Picks up from 2026-04-15 session.
 
 ## Session Savepoints (latest 5 — 28 older ones in _archive/)
+- [session_savepoint_2026-04-18b_drip-swiss.md](session_savepoint_2026-04-18b_drip-swiss.md) — drip Swiss Clinical re-skin: direction picked from 10-tab /samples (vs pharma brutalism, japanese pharmacy, luxury black card, hi-vis industrial, prior 5 clinical variants); 6 commits flipping every public + app surface from dark Function-Health to white Vignelli/Crouwel; /drip stays dark per BRAND §9; kit primitives + helix unreferenced as follow-up
+- [session_savepoint_2026-04-18_drip.md](session_savepoint_2026-04-18_drip.md) — drip marathon: 13 commits closing 2026-04-17 checkpoint + post-checkpoint self-service creator loop + public surface redesign after design callout. Full E2E creator loop working (sign up → launch → sell → sales feed). Dashboard + /app/products parked for next session (inline-style mess needs BRAND.md treatment).
 - [session_savepoint_2026-04-18.md](session_savepoint_2026-04-18.md) — Morning Light marathon: 7 ops docs (empanelment, tier1, price sheet, P&L tracker, case study), Telegram chatbot + monorepo integration at `bot/`, unified nav + docs hub, Singularity→Morning Light rebrand, A4 overlap fix, `.vercelignore` 404 fix, 3 commits pushed + prod deploy verified
 - [session_savepoint_2026-04-15.md](session_savepoint_2026-04-15.md) — Marathon: Paperclip PR #3746 (11 cleanup passes, −2,440 lines, 16→7 cycles), Aeon Phase 2 affective memory (8 commits, full pipeline), Aeon hygiene (3 commits), security incident with 3 token rotations
 - [session_savepoint_2026-04-14.md](session_savepoint_2026-04-14.md) — elevatex: Phase 4e.3 retry endpoint shipped + 12 prod-config bugs fixed end-to-end (blob token, middleware, parser URL, DWG reject, shapely polygonize, QStash EU region, Upstash env hygiene, worker public route)
@@ -57,6 +59,8 @@
 - [feedback_openclaw_glm_routing.md](feedback_openclaw_glm_routing.md) — GLM on OpenClaw: free OR tier caps max_tokens under runtime default; only glm-4.5-air:free works free, paid GLMs silently fall back
 - [feedback_secret_handling.md](feedback_secret_handling.md) — Never Edit/Write/Read files containing secrets — Claude Code's file-change notification echoes contents into session jsonl, creating a leak loop (lesson from 3-rotation incident 2026-04-15)
 - [feedback_design_process.md](feedback_design_process.md) — Before any visual surface: read the project brand bible + study an existing component. Inline styles against a generic dark palette produces trash.
+- [feedback_copy_style.md](feedback_copy_style.md) — Three AI-slop glyphs to never use in copy: em-dash `—`, double-hyphen `--`, section mark `§`. Replace with period/comma/colon/mid-dot, or rephrase.
+- [feedback_opus_4_7_prompting.md](feedback_opus_4_7_prompting.md) — Opus 4.7 punishes imprecision: temperature/top_p/top_k blocked, xhigh default, adaptive thinking eats budget on vague prompts. Demand explicit intent + success criteria + constraints + what-NOT-to-do.
 
 ## Projects (New)
 - [project_nts.md](project_nts.md) — Neo Tokyo Studios: AI anime production house, brand bible complete, Vercel deployed
