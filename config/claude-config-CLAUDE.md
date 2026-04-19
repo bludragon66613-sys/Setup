@@ -15,3 +15,7 @@ If gstack skills aren't working, run `cd $env:USERPROFILE\.claude\skills\gstack 
 
 ## Karpathy guidelines (always on)
 Before any non-trivial code work, invoke the `karpathy-guidelines` skill. 4 principles: (1) Think Before Coding — surface assumptions, ask when unclear. (2) Simplicity First — minimum code, no speculative features. (3) Surgical Changes — every changed line traces to the request. (4) Goal-Driven Execution — define verifiable success criteria, loop until met.
+
+## browser-harness (CDP → user's Chrome)
+Windows-patched install at `~/Developer/browser-harness` (socket paths use `tempfile.gettempdir()` instead of `/tmp/`). Invoke as `browser-harness` (on PATH). Use for browser tasks that need the user's logged-in Chrome session (GitHub, X, LinkedIn, drip.markets creator accounts). Prefer `/browse` from gstack for stateless fetches. First call on a fresh Chrome profile may require ticking remote-debugging at `chrome://inspect/#remote-debugging`.
+@~/Developer/browser-harness/SKILL.md

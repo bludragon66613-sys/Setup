@@ -61,6 +61,7 @@
 - [feedback_design_process.md](feedback_design_process.md) — Before any visual surface: read the project brand bible + study an existing component. Inline styles against a generic dark palette produces trash.
 - [feedback_copy_style.md](feedback_copy_style.md) — Three AI-slop glyphs to never use in copy: em-dash `—`, double-hyphen `--`, section mark `§`. Replace with period/comma/colon/mid-dot, or rephrase.
 - [feedback_opus_4_7_prompting.md](feedback_opus_4_7_prompting.md) — Opus 4.7 punishes imprecision: temperature/top_p/top_k blocked, xhigh default, adaptive thinking eats budget on vague prompts. Demand explicit intent + success criteria + constraints + what-NOT-to-do.
+- [feedback_rtk_filter.md](feedback_rtk_filter.md) — rtk filter drops tsc error lines so broken builds look green. After schema/type changes, run `pnpm typecheck` without rtk at least once before committing.
 
 ## Projects (New)
 - [project_nts.md](project_nts.md) — Neo Tokyo Studios: AI anime production house, brand bible complete, Vercel deployed
@@ -69,3 +70,4 @@
 - [project_autoresearch.md](project_autoresearch.md) — Autoresearch: karpathy-style experiment loop ported from davebcn87/pi-autoresearch, wired into NERV dashboard + Aeon skill-evolve + n8n cron + Obsidian sync
 - [project_drip.md](project_drip.md) — **drip** (rebranded from "DRIP Protocol" 2026-04-17): peptide creator-brand platform at drip.markets, AI discovery + creator storefronts + MD-pharmacy rails + $DRIP token. Domain secured. With Matteo (cybergenesis621).
 - [project_morning_light.md](project_morning_light.md) — **Morning Light Energy** (was "Singularity Energy" pre-2026-04-17): AI-powered Premier-backed rooftop solar EPC in TG+AP, `morning-light-energy` repo, `morninglight.energy` domain. 5-phase plan (residential → district aggregator → C&I → platform → utility 10MW).
+- [project_browser_harness.md](project_browser_harness.md) — **browser-harness (Windows-patched)** at `~/Developer/browser-harness`, installed 2026-04-19. AF_UNIX → TCP loopback + UTF-8 stdout fixes. Global `browser-harness` CLI, imported into `~/.claude/CLAUDE.md`.
