@@ -24,20 +24,10 @@
 - [project_furniture_design_tool.md](project_furniture_design_tool.md) — kitchenandwardrobe: Next.js 16 layout generator, Phase 6 quality toggle + inspiration refs shipped 2026-04-13, 281 tests, on master
 - [project_wiki_automation.md](project_wiki_automation.md) — **DEFERRED.** 3-layer plan (n8n cron + SessionEnd hook + OpenClaw) to automate /wiki-ingest /wiki-lint /wiki-digest against the Obsidian vault. Picks up from 2026-04-15 session.
 
-## Session Savepoints (latest 5 — 28 older ones in _archive/)
+## Session Savepoints (latest 3 — 37 older ones in _archive/)
 - [session_savepoint_2026-04-19c_design-agents.md](session_savepoint_2026-04-19c_design-agents.md) — design agent stack upgraded into 3-agent coordinated loop: ui-ux-architect (scored audit, 12-dim rubric) + super-designer (self-critique, 9-item AI-slop gate) + design-mastery (new, coordinator/brain with Task dispatch, taste brief, library custodian). Synced to Setup repo + Obsidian.
 - [session_savepoint_2026-04-19b_drip-fixes.md](session_savepoint_2026-04-19b_drip-fixes.md) — drip post-crash continuation: 6 commits closing wizard dead routes + 5 "next PR" tasks (createFromAuth rename, gate weight sliders, pin candidates, payouts ledger, rejected CSV). Migrations 0009/0010/0011 applied to prod. Payouts real-capable, mock-by-default.
 - [session_savepoint_2026-04-19_drip-privy.md](session_savepoint_2026-04-19_drip-privy.md) — drip: pipeline funnel shipped end-to-end (spec→code) + Clerk→Privy migration complete (28 files). Blocker: user creates Privy app + sets 3 env vars to unblock auth.
-- [session_savepoint_2026-04-18b_drip-swiss.md](session_savepoint_2026-04-18b_drip-swiss.md) — drip Swiss Clinical re-skin: direction picked from 10-tab /samples (vs pharma brutalism, japanese pharmacy, luxury black card, hi-vis industrial, prior 5 clinical variants); 6 commits flipping every public + app surface from dark Function-Health to white Vignelli/Crouwel; /drip stays dark per BRAND §9; kit primitives + helix unreferenced as follow-up
-- [session_savepoint_2026-04-18_drip.md](session_savepoint_2026-04-18_drip.md) — drip marathon: 13 commits closing 2026-04-17 checkpoint + post-checkpoint self-service creator loop + public surface redesign after design callout. Full E2E creator loop working (sign up → launch → sell → sales feed). Dashboard + /app/products parked for next session (inline-style mess needs BRAND.md treatment).
-- [session_savepoint_2026-04-18.md](session_savepoint_2026-04-18.md) — Morning Light marathon: 7 ops docs (empanelment, tier1, price sheet, P&L tracker, case study), Telegram chatbot + monorepo integration at `bot/`, unified nav + docs hub, Singularity→Morning Light rebrand, A4 overlap fix, `.vercelignore` 404 fix, 3 commits pushed + prod deploy verified
-- [session_savepoint_2026-04-15.md](session_savepoint_2026-04-15.md) — Marathon: Paperclip PR #3746 (11 cleanup passes, −2,440 lines, 16→7 cycles), Aeon Phase 2 affective memory (8 commits, full pipeline), Aeon hygiene (3 commits), security incident with 3 token rotations
-- [session_savepoint_2026-04-14.md](session_savepoint_2026-04-14.md) — elevatex: Phase 4e.3 retry endpoint shipped + 12 prod-config bugs fixed end-to-end (blob token, middleware, parser URL, DWG reject, shapely polygonize, QStash EU region, Upstash env hygiene, worker public route)
-- [session_savepoint_2026-04-13.md](session_savepoint_2026-04-13.md) — anime-db into NTS monorepo, multi-source screencap fetcher, 120/120 real k-means palettes
-- [session_savepoint_2026-04-08b.md](session_savepoint_2026-04-08b.md) — Ecosystem audit: 9 component updates, OpenClaw 2026.4.9
-- [session_savepoint_2026-04-08.md](session_savepoint_2026-04-08.md) — LightRAG vault project docs, ingestion paused pending API credits
-- [session_savepoint_2026-03-27.md](session_savepoint_2026-03-27.md) — TallyAI hardening: 15 security fixes, Upstash Redis, 345 tests
-- [session_savepoint_2026-03-26d.md](session_savepoint_2026-03-26d.md) — TallyAI MVP: full build, Munshi brand, Vercel deploy
 
 ## TODOs
 - [todo_design_agents.md](todo_design_agents.md) — design-mastery stack follow-ups: seed first best-designs library (drip), run first end-to-end trial (`/app/products`), update CLAUDE.md agent table, optional claudecodemem `design/` subfolder

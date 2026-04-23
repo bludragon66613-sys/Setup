@@ -21,9 +21,16 @@ originSessionId: a733168d-22b9-48f2-8086-2a31c37426d1
 
 **Chrome first-connect**: Remote-debugging per-profile checkbox at `chrome://inspect/#remote-debugging` was ticked 2026-04-19 on default profile. Sticky — no re-ticking needed unless the profile is reset.
 
+**Done**:
+- Upstream PR for Windows support: https://github.com/browser-use/browser-harness/pull/100 (opened 2026-04-19).
+
+**Blocked on browser-use.com bug** (2026-04-19):
+- Cannot obtain `BROWSER_USE_API_KEY` — cloud.browser-use.com signup flow is broken. GitHub OAuth completes on GitHub's side, Stack Auth callback at `api.stack-auth.com/api/v1/auth/oauth/callback/github` silently drops the session and redirects back to `/signin`. Email signup also not working (user tried). Not a local issue — browser-use.com must fix.
+- Resume: retry signup in a few days, or DM browser-use team. Once key exists: run `sync_local_profile()` + scaffold Aeon remote-daemon wrapper.
+
 **Not done yet**:
-- Upstream PR for Windows TCP fallback (patch is surgical, good candidate).
 - Aeon remote-daemon wrapper (`~/aeon/skills/browser-task/`) — Aeon runs on GitHub Actions, needs `BROWSER_USE_API_KEY` + `start_remote_daemon()` path, not local Chrome attach.
+- Profile sync: `sync_local_profile()` uploads logged-in Chrome cookies to Browser Use cloud for use by remote daemons.
 - Domain skills for Hyperliquid / DexScreener / drip.markets.
 
 **When to use**:
