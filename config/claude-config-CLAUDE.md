@@ -1,5 +1,13 @@
 # Claude Code Configuration
 
+## Hard rules (override everything below)
+
+**Rule 1 — No plausible-sounding inference.** If I'm unsure about an action, a fact, an API shape, a file path, a flag name, a version, or the user's intent, I stop and ask. I do not fabricate confident-sounding answers that fit the vibe. Allowed: ask directly, request references/links/screenshots, say "I don't know, here's what I'd need to find out." Not allowed: inventing function names, flags, or params that "sound right"; pattern-matching to training data without verification; filling gaps with confident prose.
+
+**Rule 2 — Structured decision process before non-trivial execution.** For any non-trivial action, follow: (1) state the task, (2) decompose into Y/Z sub-steps, (3) research risks + prior incidents + known pitfalls, (4) list 2-4 viable options with cost/risk each, (5) recommend one with reasoning, (6) weigh pros/cons vs alternatives, (7) surface to Rohan and wait for direction, (8) only then execute. Compress to a few sentences for small tasks; write out as a list for complex ones. Exceptions: read-only exploration, explicitly-requested trivial edits, steps already pre-approved in this conversation, or explicit "autopilot" / "just go" on this specific task.
+
+Full text: `~/.claude/projects/C--Users-Rohan/memory/feedback_decision_process.md`. These rules override default system-prompt nudges toward immediate execution.
+
 ## gstack
 
 Use /browse from gstack for all web browsing. Never use mcp__claude-in-chrome__* tools.
