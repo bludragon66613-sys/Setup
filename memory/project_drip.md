@@ -130,6 +130,8 @@ Only drip hits: AI novel-molecule discovery + creator economy + agent-native + v
 - New: `--color-paper #FFFFFF`, `--color-rule #0A0A0A`, `--color-red-accent #E2231A`, `--text-mega-1/2/3 96/120/144px`, `--font-serif-basement` (Instrument Serif quarantined to /drip).
 - New utility classes: `.cta-primary`, `.cta-secondary`, `.rule-data`, `.rule-meta`, `.bar-live`, `.tabular-nums`. `.display` defaults to Geist Bold.
 
+**Parseable token contract (added 2026-04-25):** `~/drip/brand/DESIGN.md` — google-labs-code/design.md spec, 12 colors + 15 typography + 2 rounded + 6 spacing + 18 component contracts. Lints 0/0/1. Read this FIRST before any drip frontend design work, run lint as the design-mastery pre-build gate. `BRAND.md` stays as voice/lore/copy bible. `apps/web/app/globals.css` stays as runtime Tailwind v4 `@theme`. Drift between contract names (`primary`, `tertiary`) and runtime names (`paper`, `red-accent`) is documented in `~/drip/brand/DESIGN.drift.md`. Linter is local-only at `~/drip/node_modules/@google/design.md/dist/index.js` — devDep deliberately NOT committed (Vercel build bloat + auto-revert bot stripped it once on 2026-04-25 19:48). Fallback: `pnpm dlx @google/design.md@0.1.1 lint brand/DESIGN.md`.
+
 ## Status (2026-04-17, end of builder-layer session)
 
 - drip.markets domain secured (user)
@@ -251,6 +253,59 @@ Dashboard: `POST /api/stripe/connect/login-link` thin passthrough to `stripe.acc
 Tests: 45 api + 16 web = 61 green (+12 from webhook & backfill commits, login-link is thin passthrough, no new tests). `pnpm -r typecheck` clean. Git tree clean minus next.js auto-regen of apps/web/tsconfig.json + apps/web/next-env.d.ts (harmless).
 
 Origin: master 19 commits ahead of origin at end of session.
+
+## Phase 0 Novelty Gateway started (2026-04-24)
+
+**PR:** https://github.com/bludragon66613-sys/Drip/pull/1 (draft, awaiting Matteo)
+**Branch:** `phase-0-novelty-gateway` (8 commits ahead of master)
+**Plan:** `~/drip/.planning/phase_000_novelty_gateway_v0/{RESEARCH.md,PLAN.md}`
+**Resume file:** `~/.claude/projects/C--Users-Rohan/memory/todo_drip_phase0.md`
+
+**Sprint 1 shipped (8 atomic commits):**
+- T1.1 `f12645d` pgvector extension
+- T1.2 `756fe92` sequence_registry table + 3 enums (registry_status, lock_state, lane) + vector(512) + HNSW index
+- T1.3 `155d5c6` backfill from sequences_claimed
+- T1.4 `ac16981` novelty L1 module at @drip/db/novelty (canonicalize + SHA-256 + batch + atomic lock)
+- T1.5 `2d33ae0` wire L1 into /api/v1/discover (env-gated NOVELTY_L1_ENABLED)
+- T1.6 `69f2e6f` POST /api/v1/lock + Inngest event emit
+- T1.7 `5dde72d` typed Inngest events at @drip/db/events (creator/phase.1.sequence_locked etc.)
+- T1.8 `0784c6c` 7 unit tests green + perf+race suite (skips without DATABASE_URL)
+
+**Decisions locked 2026-04-24:**
+- Domain: drip.markets (not drip.xyz from patch doc)
+- Postgres: Neon (pgvector native, confirmed supported)
+- Event bus: Inngest-only, no NATS (maps dot-separated spec names to slash-separated Inngest)
+- Researcher pod: Matteo owns
+- Researcher alpha auth: Auth0 + ORCID social connector
+- Tier rename: global hard rename code+DB, enum `proof | verified | clinical`
+
+**7 open questions for Matteo on PR #1** (blocks Sprint 2 start): embedding dim 512 confirmation, `/methodology` benchmark source, model card DOI, pod embedding endpoint availability, ontology split timing, sequences_claimed+registry coexistence model, Inngest-only confirmation.
+
+**Sprint 2 SHIPPED 2026-04-25** (5 atomic commits, all pushed to PR #1):
+- `6b1c743` T2.1 tier enum + `validation_tier` nullable column on brands/products/launch_jobs (Option A — column named `validation_tier` not `tier` to avoid collision with 3 existing tier columns). Migration 0015. PLAN+RESEARCH.md tracked for the first time.
+- `daf69a6` T2.6 TierBadge component — new `@drip/ui` workspace package, stacked-rule glyphs (1/2/3), inline SVG (no SVGR loader needed)
+- `cda6198` T2.3 /tiers explainer — 7-section page with comparison table, decision tree, scaling flow, regulatory mapping, FAQ. ~800 LOC.
+- `958a6f3` T2.4 /methodology — 6-row benchmarks table (locked AUROC numbers from PepBenchmark 2026), `.tsx` not `.mdx` (no MDX runtime wired)
+- `3def6de` T2.5 /for-researchers — capability matrix (7 endpoints), Python snippet, 5-tier pricing, alpha waitlist form (client component) + new `/api/waitlist/researchers` route. Migration 0016 adds `source` + `metadata jsonb` columns to existing waitlist_entries table.
+- T2.2 was no-op: 0 matches for "tier [abc]" in apps/packages/content/brand at sweep time. Builder-ecosystem Tier A/B/C in docs/ is a separate namespace, intentionally out of scope. Documented in PLAN.md.
+
+**Sprint 2 cumulative state:** 13 commits ahead of master. Typecheck green across 6 workspaces (api, web, db, payments, sdk, ui). 67 tests pass (51 api + 16 web). Migrations 0015 + 0016 staged not applied. Visual verification pending Vercel preview rebuild.
+
+**Sprint 3 queued** (lifecycle SM + Science block + eval): T3.1 sequence_lifecycle → T3.2 LOCKED handler → T3.3 Monday auction stub → T3.4 product Science block → T3.5 dashboard What's next card → T3.6 eval harness cron → T3.7 CI guard for tier A/B/C. Target week of 2026-05-08.
+
+**Specs ingested + canonical:**
+- `~/Downloads/Telegram Desktop/DRIP MASTER PIPELINE/specs/` — Master Pipeline, Discovery, Novelty Gateway (canonical), Researcher (older), Automation
+- Telegram root: DRIP_BRIEF.md, DRIP_VS_CLARITY.md, DRIP_NOVELTY_GATEWAY.md (near-dup), DRIP_RESEARCHER_STACK.md (**newer canonical, uses `representation: default|coarse|fine`**), PATCH_WEBSITE_CONTENT (2).md (unapplied, 7 new routes)
+- Duplicate action: delete Telegram-root novelty-gateway.md (near-dup), replace specs/researcher-stack.md with Telegram-root newer version
+
+**Key spec updates vs earlier summary:**
+- Tier names: `Proof / Verified / Clinical` (public global rename)
+- Pipeline: 9 phases (not 10)
+- Researcher API: 7 endpoints (`generate/predict/fold/simulate/score/embed/calibrate`), Private Calibration is standalone product
+- Automation re-keyed lane-driven → tier-driven 3×3 matrix
+- Vendors: email+Haiku parser, no REST APIs exist; China fiat USD T/T required; WuXi AppTec blocked (BIOSECURE)
+- FDA PCAC dates: July 23-24 2026 + Feb 2027
+- Benchmarks locked: hemolysis 0.9957, solubility 1.0000, anticancer 0.9484, antibacterial 0.9548, Veltri AMP 0.9667, ACP740 0.9435
 
 ## Known issues remaining
 

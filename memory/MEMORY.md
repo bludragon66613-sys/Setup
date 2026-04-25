@@ -25,12 +25,14 @@
 - [project_wiki_automation.md](project_wiki_automation.md) — **DEFERRED.** 3-layer plan (n8n cron + SessionEnd hook + OpenClaw) to automate /wiki-ingest /wiki-lint /wiki-digest against the Obsidian vault. Picks up from 2026-04-15 session.
 
 ## Session Savepoints (latest 3 — 37 older ones in _archive/)
+- [session_savepoint_2026-04-25_drip-sprint2.md](session_savepoint_2026-04-25_drip-sprint2.md) — drip Phase 0 Sprint 2 shipped + deployed. 16 commits ahead, Vercel preview Ready. T2.1/T2.3/T2.4/T2.5/T2.6 + 3 cleanup commits (stripe lazy, inngest bump, @google/design.md removal).
 - [session_savepoint_2026-04-19c_design-agents.md](session_savepoint_2026-04-19c_design-agents.md) — design agent stack upgraded into 3-agent coordinated loop: ui-ux-architect (scored audit, 12-dim rubric) + super-designer (self-critique, 9-item AI-slop gate) + design-mastery (new, coordinator/brain with Task dispatch, taste brief, library custodian). Synced to Setup repo + Obsidian.
 - [session_savepoint_2026-04-19b_drip-fixes.md](session_savepoint_2026-04-19b_drip-fixes.md) — drip post-crash continuation: 6 commits closing wizard dead routes + 5 "next PR" tasks (createFromAuth rename, gate weight sliders, pin candidates, payouts ledger, rejected CSV). Migrations 0009/0010/0011 applied to prod. Payouts real-capable, mock-by-default.
 - [session_savepoint_2026-04-19_drip-privy.md](session_savepoint_2026-04-19_drip-privy.md) — drip: pipeline funnel shipped end-to-end (spec→code) + Clerk→Privy migration complete (28 files). Blocker: user creates Privy app + sets 3 env vars to unblock auth.
 
 ## TODOs
 - [todo_design_agents.md](todo_design_agents.md) — design-mastery stack follow-ups: seed first best-designs library (drip), run first end-to-end trial (`/app/products`), update CLAUDE.md agent table, optional claudecodemem `design/` subfolder
+- [todo_personal_jarvis.md](todo_personal_jarvis.md) — Personal ops Jarvis (Obsidian vault overlay) — build-efficiency + systems-in-check. Parked 2026-04-24. Un-park trigger: ≤3 active projects OR specific pain surfaces. Full spec inside.
 
 ## Stalled
 - NERV Desktop app (Tauri+React) — superseded by Kaneda Eye (same Tauri+React stack, broader scope)
