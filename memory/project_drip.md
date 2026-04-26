@@ -291,7 +291,27 @@ Origin: master 19 commits ahead of origin at end of session.
 
 **Sprint 2 cumulative state:** 13 commits ahead of master. Typecheck green across 6 workspaces (api, web, db, payments, sdk, ui). 67 tests pass (51 api + 16 web). Migrations 0015 + 0016 staged not applied. Visual verification pending Vercel preview rebuild.
 
-**Sprint 3 queued** (lifecycle SM + Science block + eval): T3.1 sequence_lifecycle → T3.2 LOCKED handler → T3.3 Monday auction stub → T3.4 product Science block → T3.5 dashboard What's next card → T3.6 eval harness cron → T3.7 CI guard for tier A/B/C. Target week of 2026-05-08.
+**Sprint 3 SHIPPED 2026-04-26** (pulled forward from 2026-05-08; Phase 0 finish, not Phase B, so Matteo silence didn't block):
+
+- `442ae35` T3.1 sequence_lifecycle table — migration `0017` (renumbered from PLAN's 0016 because waitlist_source_metadata claimed 0016 ahead of Sprint 3). 20-state `lifecycle_state` enum. Two tables: lifecycle (PK = sequence_hash, FK → registry, current_tier, attestation_tx) + lifecycle_audit (BIGSERIAL, indexed by hash + at).
+- `7533b07` T3.2 inngest LOCKED handler — `creator/phase.1.sequence_locked` consumer. Repo `seedLocked` is transactional + ON CONFLICT DO NOTHING + returns created:bool so Inngest replays are no-ops not duplicate audit rows. Pure handler split for unit tests.
+- `7f4025e` T3.3 synthesis auction cron stub — `0 15 * * 1`, transitions QUEUED → AUCTIONED, emits `vendor/synthesis.auctioned`. New generic `transitionAll(from, to, actor)` repo method. Phase A vendor adapters drop into the same contract.
+- `1acb5e0` T3.5 dashboard whats-next card — exhaustive switch over 19 lifecycle states + null + never-fallback. Tone shifts neutral/warn/success per state. Wired between header + payouts.
+- `d7ad3a5` T3.6 eval harness daily cron + 50 golden briefs — `0 8 * * *`, 5 cheap DB metrics → `evals/results/YYYY-MM-DD.jsonl`. New `@drip/db/eval` export (apps don't carry direct drizzle). build_profile validity / L1 P95 / collision FN deferred to Phase 0.5 with rationale.
+- `f3da406` T3.4 product science block — creator-side `/app/products/[id]/page.tsx` + 8 subsections per PATCH §7.3.5. Sections 02/03/05/08 backed by real data; 01/04/06/07 render explicit "to be confirmed" placeholders.
+- T3.7 split: `03ad909` T3.7a (bootstrap monorepo CI workflow) + `b3aa4bd` T3.7b (`scripts/check-tier-nomenclature.sh` + lint job, rg word-boundary `\btier[ -]?[abc]\b`).
+- `c227969` PLAN.md status block above Sprint 3 task list.
+
+**Migrations applied to prod 2026-04-26 (drip-samples Neon):** 0012 → 0017 sequentially via `packages/db/scripts/apply-missing-migrations.ts`. Final audit: 18/18 applied (was 12/17 at start of cleanup session).
+
+**Tooling added 2026-04-26:**
+- `packages/db/scripts/audit-prod-schema.ts` — read-only pg_catalog probe per migration. Now the canonical "what's applied?" source per `MIGRATIONS.md`.
+- `packages/db/scripts/apply-missing-migrations.ts` — one-shot apply, halts on error.
+- `.github/workflows/ci.yml` — first monorepo CI. install + typecheck + test×3 + tier-nomenclature lint. First run failed on pnpm version conflict (`packageManager` vs `version: 9` input collision); fixed in `a4ff0c7`.
+
+**Sprint 3 final tally:** 70 tests green (60 api + 10 db). 6/6 workspaces typecheck clean. 18/18 migrations applied to prod. PR #1 CI green.
+
+**Phase 0 done.** Path to ship: Phase 0.5 (Layer 2 + Layer 3 novelty + literature ingest + expiry SM + build_profile API) → Phase A (vendor adapters, real auction, UMA testnet, formulation handoff) → Phase B (researcher lane, Matteo's pod, Auth0 ORCID, Python SDK, ontology split — gated on the 7 PR #1 questions Matteo still hasn't answered).
 
 **Specs ingested + canonical:**
 - `~/Downloads/Telegram Desktop/DRIP MASTER PIPELINE/specs/` — Master Pipeline, Discovery, Novelty Gateway (canonical), Researcher (older), Automation
