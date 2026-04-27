@@ -8,4 +8,3 @@
 
 ## Project
 - [project_drip_products_session1.md](project_drip_products_session1.md) — First Mode C audit+build run on /app/products, 2026-04-24. Composite 8.1/10. Key wins: product identity heading, motion-tick on state transitions, shimmer skeleton, error token fix.
-- [project_drip_designmd_adoption.md](project_drip_designmd_adoption.md) — drip pilots google-labs-code/design.md spec (Option C). brand/DESIGN.md is the parseable token + 18 component contract; lint runs as design-mastery pre-build gate. Linter is local-only — devDep not committed (Vercel bloat + auto-revert bot).
