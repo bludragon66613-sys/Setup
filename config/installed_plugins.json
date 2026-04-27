@@ -1,0 +1,229 @@
+{
+  "version": 2,
+  "plugins": {
+    "claude-mem@thedotmack": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\thedotmack\\claude-mem\\12.1.0",
+        "version": "12.1.0",
+        "installedAt": "2026-04-04T22:25:54.829Z",
+        "lastUpdated": "2026-04-09T23:22:06.506Z",
+        "gitCommitSha": "e2a230286dd9fb351c4631c75da23daff1d27f12"
+      }
+    ],
+    "agent-sdk-dev@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\agent-sdk-dev\\unknown",
+        "version": "unknown",
+        "installedAt": "2026-03-21T18:44:33.187Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "adspirer-ads-agent@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\adspirer-ads-agent\\1.2.0",
+        "version": "1.2.0",
+        "installedAt": "2026-03-21T18:44:51.610Z",
+        "lastUpdated": "2026-04-23T18:24:40.278Z",
+        "gitCommitSha": "aa70dbdbbbb843e94a794c10c2b13f5dd66b5e40"
+      }
+    ],
+    "figma@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\figma\\2.1.15",
+        "version": "2.1.15",
+        "installedAt": "2026-03-21T18:45:17.491Z",
+        "lastUpdated": "2026-04-25T13:35:00.776Z",
+        "gitCommitSha": "f046182e32c8160b1254ad12ec8318f9a9aa50b5"
+      }
+    ],
+    "code-review@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\code-review\\unknown",
+        "version": "unknown",
+        "installedAt": "2026-03-21T18:45:24.630Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "frontend-design@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\frontend-design\\unknown",
+        "version": "unknown",
+        "installedAt": "2026-03-21T18:45:34.960Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "chrome-devtools-mcp@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\chrome-devtools-mcp\\0.22.0",
+        "version": "0.22.0",
+        "installedAt": "2026-03-21T18:46:01.647Z",
+        "lastUpdated": "2026-04-23T18:25:03.086Z",
+        "gitCommitSha": "c2d8009ff75f76bce1ec4cf79c2467b50d81725e"
+      }
+    ],
+    "claude-code-setup@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\claude-code-setup\\1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-21T18:46:10.284Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      },
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\claude-code-setup\\1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-04-25T13:33:41.305Z",
+        "lastUpdated": "2026-04-25T13:33:41.305Z"
+      }
+    ],
+    "vercel@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\vercel\\0.40.0",
+        "version": "0.40.0",
+        "installedAt": "2026-03-21T18:46:45.104Z",
+        "lastUpdated": "2026-04-19T11:49:55.269Z",
+        "gitCommitSha": "3fe23669ec5ab4d69a4170d61aa589658db7358f"
+      }
+    ],
+    "typescript-lsp@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\typescript-lsp\\1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-21T18:46:56.095Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "skill-creator@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\skill-creator\\unknown",
+        "version": "unknown",
+        "installedAt": "2026-03-21T18:47:03.802Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "github@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\github\\unknown",
+        "version": "unknown",
+        "installedAt": "2026-03-21T18:47:22.402Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "supabase@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\supabase\\0.1.5",
+        "version": "0.1.5",
+        "installedAt": "2026-03-21T18:48:09.398Z",
+        "lastUpdated": "2026-04-23T18:24:39.820Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "telegram@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\telegram\\0.0.6",
+        "version": "0.0.6",
+        "installedAt": "2026-03-21T18:48:14.050Z",
+        "lastUpdated": "2026-04-15T02:54:18.475Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "superpowers@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\superpowers\\5.0.7",
+        "version": "5.0.7",
+        "installedAt": "2026-03-21T18:48:28.103Z",
+        "lastUpdated": "2026-04-19T11:49:55.233Z",
+        "gitCommitSha": "8ea39819eed74fe2a0338e71789f06b30e953041"
+      }
+    ],
+    "code-simplifier@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\code-simplifier\\1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-21T18:48:43.733Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "61c0597779bd2d670dcd4fbbf37c66aa19eb2ce6"
+      }
+    ],
+    "zoominfo@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\claude-plugins-official\\zoominfo\\1.0.1",
+        "version": "1.0.1",
+        "installedAt": "2026-03-21T18:49:39.391Z",
+        "lastUpdated": "2026-03-25T20:54:41.587Z",
+        "gitCommitSha": "0705316ef8a2d0c64f81e50d4612ccc6a74edf03"
+      }
+    ],
+    "arscontexta@agenticnotetaking": [
+      {
+        "scope": "project",
+        "projectPath": "C:\\Users\\Rohan",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\marketplaces\\agenticnotetaking",
+        "version": "latest",
+        "installedAt": "2026-04-05T11:00:00.000Z",
+        "lastUpdated": "2026-04-05T11:00:00.000Z",
+        "gitCommitSha": "2acfd5c"
+      }
+    ],
+    "compound-engineering@EveryInc": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\EveryInc\\compound-engineering\\2.63.1",
+        "version": "2.63.1",
+        "installedAt": "2026-04-06T00:00:00.000Z",
+        "lastUpdated": "2026-04-09T23:28:53.955Z",
+        "gitCommitSha": "6f3c84115037d4549bdb3d30dcc66588108ea733"
+      }
+    ],
+    "caveman@caveman": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\Rohan\\.claude\\plugins\\cache\\caveman\\caveman\\92f892f2b997",
+        "version": "92f892f2b997",
+        "installedAt": "2026-04-11T08:51:34.815Z",
+        "lastUpdated": "2026-04-11T08:51:34.815Z",
+        "gitCommitSha": "92f892f2b99744a4501f35bce9a2e384878e4877"
+      }
+    ]
+  }
+}

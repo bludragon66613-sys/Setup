@@ -1,12 +1,8 @@
 {
   "env": {},
   "permissions": {
-    "allow": [
-      "mcp__pencil",
-      "mcp__gitnexus",
-      "mcp__lightrag-vault"
-    ],
-    "defaultMode": "bypassPermissions"
+    "allow": [],
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "SessionStart": [
@@ -25,17 +21,6 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/session-start.mjs\""
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'sleep 20 && powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:/Users/Rohan/.claude/scripts/dedup-claude-mem-mcp.ps1'",
-            "async": true,
-            "timeout": 60
           }
         ]
       }
@@ -88,7 +73,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/persistent-mode.mjs\""
+            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/persistent-mode.mjs\"",
+            "timeout": 15
           }
         ]
       },
@@ -96,7 +82,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/code-simplifier.mjs\""
+            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/code-simplifier.mjs\"",
+            "timeout": 30,
+            "async": true
           }
         ]
       }
@@ -146,7 +134,8 @@
     "superpowers@claude-plugins-official": true,
     "arscontexta@agenticnotetaking": false,
     "compound-engineering@EveryInc": false,
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "claude-code-setup@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "tobi": {
@@ -176,6 +165,6 @@
   },
   "effortLevel": "high",
   "autoUpdatesChannel": "latest",
-  "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": false,
+  "voiceEnabled": true
 }

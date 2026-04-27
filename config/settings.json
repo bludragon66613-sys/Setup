@@ -1,12 +1,8 @@
 {
   "env": {},
   "permissions": {
-    "allow": [
-      "mcp__pencil",
-      "mcp__gitnexus",
-      "mcp__lightrag-vault"
-    ],
-    "defaultMode": "bypassPermissions"
+    "allow": [],
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "SessionStart": [
@@ -25,22 +21,6 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/session-start.mjs\""
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"C:/Users/Rohan/.claude/hooks/gsd-check-update.js\""
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash C:/Users/Rohan/.claude/hooks/gsd-session-state.sh"
           }
         ]
       }
@@ -62,26 +42,6 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/post-tool-use.mjs\""
-          }
-        ]
-      },
-      {
-        "matcher": "Bash|Edit|Write|MultiEdit|Agent|Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"C:/Users/Rohan/.claude/hooks/gsd-context-monitor.js\"",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash C:/Users/Rohan/.claude/hooks/gsd-phase-boundary.sh",
-            "timeout": 5
           }
         ]
       }
@@ -113,7 +73,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/persistent-mode.mjs\""
+            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/persistent-mode.mjs\"",
+            "timeout": 15
           }
         ]
       },
@@ -121,7 +82,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/code-simplifier.mjs\""
+            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/code-simplifier.mjs\"",
+            "timeout": 30,
+            "async": true
           }
         ]
       }
@@ -144,46 +107,6 @@
             "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/pre-tool-use.mjs\""
           }
         ]
-      },
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"C:/Users/Rohan/.claude/hooks/gsd-prompt-guard.js\"",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"C:/Users/Rohan/.claude/hooks/gsd-read-guard.js\"",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"C:/Users/Rohan/.claude/hooks/gsd-workflow-guard.js\"",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash C:/Users/Rohan/.claude/hooks/gsd-validate-commit.sh",
-            "timeout": 5
-          }
-        ]
       }
     ],
     "PostToolUseFailure": [
@@ -203,14 +126,16 @@
   },
   "enabledPlugins": {
     "claude-mem@thedotmack": true,
-    "code-review@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
+    "code-review@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": false,
     "chrome-devtools-mcp@claude-plugins-official": false,
     "vercel@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": false,
     "superpowers@claude-plugins-official": true,
-    "arscontexta@agenticnotetaking": true,
-    "compound-engineering@EveryInc": true
+    "arscontexta@agenticnotetaking": false,
+    "compound-engineering@EveryInc": false,
+    "caveman@caveman": true,
+    "claude-code-setup@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "tobi": {
@@ -230,10 +155,16 @@
         "source": "github",
         "repo": "agenticnotetaking/arscontexta"
       }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
     }
   },
   "effortLevel": "high",
   "autoUpdatesChannel": "latest",
-  "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": false,
+  "voiceEnabled": true
 }
