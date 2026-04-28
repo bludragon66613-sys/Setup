@@ -341,14 +341,15 @@ Branch `phase-0-novelty-gateway` advanced 49 → 51 ahead of master. PR #1 still
 
 **Specs ingested + canonical:**
 - `~/Downloads/Telegram Desktop/DRIP MASTER PIPELINE/specs/` — Master Pipeline, Discovery, Novelty Gateway (canonical), Researcher (older), Automation
-- Telegram root: DRIP_BRIEF.md, DRIP_VS_CLARITY.md, DRIP_NOVELTY_GATEWAY.md (near-dup), DRIP_RESEARCHER_STACK.md (**newer canonical, uses `representation: default|coarse|fine`**), PATCH_WEBSITE_CONTENT (2).md (unapplied, 7 new routes)
+- Telegram root: DRIP_BRIEF.md, DRIP_VS_CLARITY.md, DRIP_NOVELTY_GATEWAY.md (near-dup), DRIP_RESEARCHER_STACK.md (**newer canonical, uses `representation: default|coarse|fine`**), PATCH_WEBSITE_CONTENT (2).md — **all 7 additions A-G have public surfaces shipped** (per `specs/README.md` provenance row); PATCH §4 cross-doc audit closed for items 1, 5, 8 + deferred for items 2, 3, 6 (upstream-spec edits) + tracked separately for item 4 (DRIP_AUTOMATION_STACK §4 + §8 + §10 tier-driven rewrite)
 - Duplicate action: delete Telegram-root novelty-gateway.md (near-dup), replace specs/researcher-stack.md with Telegram-root newer version
 
 **Key spec updates vs earlier summary:**
-- Tier names: `Proof / Verified / Clinical` (public global rename)
+- Tier names: `Proof / Verified / Clinical` (public global rename, lint-enforced via `\btier[ -]?[abc]\b` guard from T3.7b — A/B/C retired from public copy)
 - Pipeline: 9 phases (not 10)
-- Researcher API: 7 endpoints (`generate/predict/fold/simulate/score/embed/calibrate`), Private Calibration is standalone product
-- Automation re-keyed lane-driven → tier-driven 3×3 matrix
+- Researcher API: 5 methods (`generate / predict / embed / batch_submit / batch_status`) per `DRIP_RESEARCHER_STACK.md` §4 canonical. Earlier "7 endpoints" framing was stale (see §4.5 — `fold / simulate / score / calibrate` explicitly out of scope). Private Calibration is a standalone Researcher Team / Enterprise add-on, not an endpoint.
+- Automation re-keyed lane-driven → tier-driven 3×3 matrix (synth grade now couples to validation tier, not to lane — DRIP Proof = research-grade synth + Tier A assays; Verified = ISO 22716 cosmetic-GMP synth + OECD panel; Clinical = pharma-GMP DMF-referenceable synth + in-vivo). PATCH §4.4 rewrite of `DRIP_AUTOMATION_STACK.md` §4 + §8 + §10 still pending.
+- Website content: 6 platform additions + 1 per-product Science section all live (PepGuide assessment 2026-04-20 informed the spec). Routes: `/atlas`, `/regulatory`, `/methodology`, `/decode` (+`/[name]`), `/tiers`, `/for-researchers`, `/app/products/[id]`.
 - Vendors: email+Haiku parser, no REST APIs exist; China fiat USD T/T required; WuXi AppTec blocked (BIOSECURE)
 - FDA PCAC dates: July 23-24 2026 + Feb 2027
 - Benchmarks locked: hemolysis 0.9957, solubility 1.0000, anticancer 0.9484, antibacterial 0.9548, Veltri AMP 0.9667, ACP740 0.9435
