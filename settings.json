@@ -1,7 +1,26 @@
 {
   "env": {},
   "permissions": {
-    "allow": [],
+    "allow": [
+      "Bash(rtk git status*)",
+      "Bash(rtk git log*)",
+      "Bash(rtk git diff*)",
+      "Bash(rtk git show*)",
+      "Bash(rtk git branch*)",
+      "Bash(rtk gh pr view*)",
+      "Bash(rtk gh pr list*)",
+      "Bash(rtk gh pr diff*)",
+      "Bash(rtk gh pr checks*)",
+      "Bash(rtk gh run list*)",
+      "Bash(rtk gh run view*)",
+      "Bash(rtk ls*)",
+      "Bash(rtk grep*)",
+      "Bash(rtk cat*)",
+      "Bash(rtk find*)",
+      "Bash(vercel ls*)",
+      "Bash(vercel inspect*)",
+      "Bash(pip list*)"
+    ],
     "defaultMode": "acceptEdits"
   },
   "hooks": {
@@ -77,16 +96,6 @@
             "timeout": 15
           }
         ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hooks/code-simplifier.mjs\"",
-            "timeout": 30,
-            "async": true
-          }
-        ]
       }
     ],
     "UserPromptSubmit": [
@@ -129,7 +138,7 @@
     "code-review@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
     "chrome-devtools-mcp@claude-plugins-official": false,
-    "vercel@claude-plugins-official": true,
+    "vercel@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": false,
     "superpowers@claude-plugins-official": true,
     "arscontexta@agenticnotetaking": false,
@@ -163,7 +172,7 @@
       }
     }
   },
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": false,
   "voiceEnabled": true
