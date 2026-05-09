@@ -1,12 +1,11 @@
 ---
-name: Obsidian Sync Rules
-description: Obsidian vault sync rules — shueb.io exclusion + Google Drive backup requirement
+name: Obsidian Sync Exclusion
+description: Always exclude shueb.io from Obsidian vault syncs
 type: feedback
 originSessionId: a7e3f77e-b13c-49b7-9902-eb6c3a949c64
 ---
-1. Never sync shueb.io content to the Obsidian vault ("Agentic knowledge").
-2. Always sync to Google Drive (`gdrive:Agentic knowledge/`) alongside OneDrive as a backup.
+Never sync shueb.io content to the Obsidian vault ("Agentic knowledge").
 
-**Why:** shueb.io explicitly excluded from knowledge graph. Google Drive backup added because OneDrive is the single point of failure for the vault — gdrive is the redundancy layer.
+**Why:** User explicitly requested this exclusion — shueb.io should not be part of the knowledge graph.
 
-**How to apply:** The `memory-obsidian-sync.js` hook handles both automatically — syncs to OneDrive vault then spawns background rclone to gdrive. If doing manual syncs, always push to both. Requires `rclone` installed with `gdrive:` remote configured (bludragon66613@gmail.com).
+**How to apply:** When syncing projects, memory, session data, or any content to `~/OneDrive/Documents/Agentic knowledge/`, always filter out anything related to shueb.io.

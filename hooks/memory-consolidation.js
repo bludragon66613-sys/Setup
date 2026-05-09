@@ -13,11 +13,9 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { claudeMemoryDir } = require('./lib/paths');
 
-const MEMORY_DIR = path.join(
-  process.env.HOME || process.env.USERPROFILE,
-  '.claude', 'projects', 'C--Users-Rohan', 'memory'
-);
+const MEMORY_DIR = claudeMemoryDir();
 const MEMORY_INDEX = path.join(MEMORY_DIR, 'MEMORY.md');
 const LOCK_FILE = path.join(MEMORY_DIR, '.last-consolidation');
 const MIN_HOURS = 48;

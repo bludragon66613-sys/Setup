@@ -2,7 +2,7 @@
 name: project-openclaw
 description: OpenClaw local AI gateway — config, auth, Telegram bot setup, startup procedure, token refresh
 type: project
-originSessionId: d02bea36-f4a6-455f-bc2d-de9530d03cb5
+originSessionId: 3f8d3313-13e8-4a91-80a7-23a5a65ef3fb
 ---
 ## OpenClaw — Local AI Gateway for Telegram Bot
 
@@ -17,26 +17,16 @@ OpenClaw runs locally and connects the Telegram bot (@kaneda6bot) to AI models.
 **Quick health check:** `bash ~/openclaw-healthcheck.sh` (checks everything + auto-fixes)
 **Manual check:** `openclaw status` then `openclaw models status`
 
-## Current Auth State (as of 2026-04-12 ~11:00 IST)
-- **Primary:** `ollama/qwen3.5:397b-cloud` (262k ctx, runs via ollama.com cloud backend, free tier)
-- **Fallback chain:** `google/gemini-2.5-flash` → `gemini-2.5-flash-lite` → `claude-sonnet-4-6` → `openrouter/google/gemma-4-31b-it:free` → `openai-codex/gpt-5.4-mini`
-- **Routing reality:** Gateway uses latency-aware routing — light/quick turns get gemini-2.5-flash-lite; heavy turns get qwen primary. Both verified working.
-- **Verified working today:** qwen3.5:397b-cloud returned PONG via gateway agent path at 05:25:51 (api=ollama, provider=ollama, 0 cost)
-- **Anthropic auth:** Two static tokens — **BOTH `[disabled:billing 4h]`** as of session start. Auto-resolves or run `refresh-openclaw-auth.bat`.
-- **Google auth:** `google:aistudio` + `google:default` (same key `AIzaSyCT...6KH8CRh8`) — active
-- **OpenRouter auth:** `openrouter:manual` token `sk-or-v1...5ffae41f` — active
-- **OpenAI Codex auth:** `:bludragon66613@gmail.com` OAuth ok, expires in 2d. `:default` in cooldown 11h.
-- **Ollama auth:** `ollama:default = token:marker(ollama-local)` — works, baseUrl `http://127.0.0.1:11434`
-- **Local ollama models:** qwen3.5:397b-cloud, gemma4:31b (19GB), qwen2.5:1.5b, llama3.2, llama3.1
-- **Memory search:** Disabled (no embedding provider)
+## Current Auth State (as of 2026-05-10)
+- **Primary:** `openai-codex/gpt-5.5`
+- **Fallback chain:** `openai-codex/gpt-5.4-mini` → `openrouter/moonshotai/kimi-k2.6` → `openrouter/auto`
+- **Kimi K2.6 (added 2026-05-10):** Paid OpenRouter model, $0.75/M prompt + $3.50/M completion. Inserted before `openrouter/auto` so it fires explicitly when both GPT codex profiles hit cooldown/exhaustion. Verified routing via local + gateway transports.
+- **OpenAI codex auth:** Two OAuth profiles — `bludragon66613@gmail.com` + `bludragon666333@gmail.com`, both ok ~9d remaining (cooldown ~1h between them)
+- **OpenRouter auth:** API key via env `OPENROUTER_API_KEY` (sk-or-v1...87575c24), shared with perplexity provider
+- **Pending:** Add `google/gemma-4-31b-it` when it lands in OpenClaw catalog (Gemma 4 released 2026-04-02, free)
+- **Memory search:** Disabled (no embedding provider configured)
 - **Config:** `~/.openclaw/openclaw.json`
-- **Agent providers/models:** `~/.openclaw/agents/main/agent/models.json`
 - **Auth profiles:** `~/.openclaw/agents/main/agent/auth-profiles.json`
-
-## Security audit findings (deferred — pre-existing)
-- 4 CRITICAL: telegram `groupPolicy=open` + small-model sandbox warnings (gemma-4-31b in fallbacks)
-- 2 WARN: untrusted reverse proxy headers, multi-user heuristic
-- All pre-existing, not introduced this session
 
 ## Security Hardening (applied 2026-03-27)
 - **Telegram DMs:** `pairing` mode (requires pairing code, not open to anyone)

@@ -7,10 +7,11 @@
 
 const fs = require('fs');
 const path = require('path');
+const { claudeMemoryDir, homeDir, vaultBase } = require('./lib/paths');
 
-const HOME = process.env.USERPROFILE || process.env.HOME;
-const MEMORY_DIR = path.join(HOME, '.claude', 'projects', 'C--Users-Rohan', 'memory');
-const VAULT_BASE = path.join(HOME, 'OneDrive', 'Documents', 'Agentic knowledge');
+const HOME = homeDir();
+const MEMORY_DIR = claudeMemoryDir();
+const VAULT_BASE = vaultBase();
 const MEMORY_VAULT = path.join(VAULT_BASE, 'Memory');
 const MEMORY_PROJECTS = path.join(MEMORY_VAULT, 'projects');
 // Agents are NOT synced to vault — canonical source is ~/.claude/agents/
