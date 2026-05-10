@@ -10,6 +10,7 @@
 - [Multi-agent isolation](feedback_multi_agent_isolation.md) — when 2+ AI agents share a repo, use worktree-per-agent (claude/main + codex/main), not branches in shared dir
 - [Next.js build cache](feedback_nextjs_build_cache.md) — `rm -rf .next` before declaring "build green"; cache can mask conflict markers + source errors
 - [Stash pop conflicts](feedback_stash_pop_conflicts.md) — never `git add` a conflicted file without grep for `<<<<<<<` first; git accepts marker-laden files silently
+- [Next.js dotenv-expand](feedback_nextjs_dotenv_expand.md) — bcrypt hashes / `$`-containing env values get chunks eaten; escape with `\$` in `.env*`
 
 ## Project
 - [Active stack](project_active_stack.md) — NERV_02/Aeon, nerv-dashboard, n8n, Paperclip, OpenClaw, claudecodemem
@@ -17,6 +18,7 @@
 - [Paperclip onboard quirks](project_paperclip_onboard.md) — `onboard -y` silently boots second server; `/api/health` not `/health`; restart dev:server to load JWT
 - [SSquare website](project_ssquare.md) — Hyderabad commercial property dev-builder site; repo `bludragon66613-sys/Ssquare`; worktrees at ~/ssquare-claude (claude/main) + ~/ssquare-codex (codex/main); spec locked Direction E
 - [Kaneda workspace](project_kaneda_workspace.md) — Telegram bot @kaneda6bot, ~/.openclaw/workspace, Spike self-improvement loop ported 2026-05-10 (PROGRAM/ROADMAP/clawchief/evals/KB + vault round-trip)
+- [react-doctor CI](project_react_doctor.md) — react-doctor lint+score adopted 2026-05-11 across Ssquare/NERV_02/nerv-dashboard; all 3 repos at 100/100 with fail-on:warning gates active
 
 ## Reference
 - [Infra ports](reference_infra.md) — OpenClaw :18789, n8n :5678, Paperclip :3100, dashboard :5555
