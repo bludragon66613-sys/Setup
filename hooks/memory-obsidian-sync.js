@@ -184,6 +184,7 @@ const KANEDA_INCLUDE_DIRS = [
   'knowledge-base',
   'evals',
   'scripts',
+  'memory',
 ];
 
 function copyDirRecursive(src, dest) {
