@@ -162,6 +162,77 @@ function syncClaudeMd() {
   return true;
 }
 
+const KANEDA_WORKSPACE = path.join(HOME, '.openclaw', 'workspace');
+const KANEDA_VAULT = path.join(MEMORY_VAULT, 'agents');
+const KANEDA_EXCLUDE_TOP = new Set(['.git', '.openclaw', 'tmp', 'node_modules']);
+const KANEDA_INCLUDE_FILES = [
+  'MEMORY.md',
+  'PROGRAM.md',
+  'ROADMAP.md',
+  'HEARTBEAT.md',
+  'AGENTS.md',
+  'SOUL.md',
+  'IDENTITY.md',
+  'USER.md',
+  'TOOLS.md',
+];
+const KANEDA_INCLUDE_DIRS = [
+  'feedback',
+  'projects',
+  'clawchief',
+  'knowledge-base',
+  'evals',
+];
+
+function copyDirRecursive(src, dest) {
+  if (!fs.existsSync(src)) return 0;
+  fs.mkdirSync(dest, { recursive: true });
+  let count = 0;
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    if (entry.name.startsWith('.')) continue;
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      if (KANEDA_EXCLUDE_TOP.has(entry.name)) continue;
+      count += copyDirRecursive(srcPath, destPath);
+    } else if (entry.isFile()) {
+      fs.copyFileSync(srcPath, destPath);
+      count++;
+    }
+  }
+  return count;
+}
+
+function syncKanedaWorkspace() {
+  if (!fs.existsSync(KANEDA_WORKSPACE)) return 0;
+  fs.mkdirSync(KANEDA_VAULT, { recursive: true });
+
+  let count = 0;
+
+  for (const f of KANEDA_INCLUDE_FILES) {
+    const src = path.join(KANEDA_WORKSPACE, f);
+    if (!fs.existsSync(src)) continue;
+    fs.copyFileSync(src, path.join(KANEDA_VAULT, f));
+    count++;
+  }
+
+  for (const d of KANEDA_INCLUDE_DIRS) {
+    const src = path.join(KANEDA_WORKSPACE, d);
+    if (!fs.existsSync(src)) continue;
+    count += copyDirRecursive(src, path.join(KANEDA_VAULT, d));
+  }
+
+  // Compatibility alias: previous loop tracked workspace MEMORY.md as SPIKE_MEMORY.md.
+  // Mirror Kaneda's curated MEMORY.md to KANEDA_MEMORY.md alongside Spike's legacy file.
+  const kanedaMem = path.join(KANEDA_WORKSPACE, 'MEMORY.md');
+  if (fs.existsSync(kanedaMem)) {
+    fs.copyFileSync(kanedaMem, path.join(MEMORY_VAULT, 'KANEDA_MEMORY.md'));
+    count++;
+  }
+
+  return count;
+}
+
 function writeDailyNote() {
   const today = new Date().toISOString().slice(0, 10);
   fs.mkdirSync(DAILY_DIR, { recursive: true });
@@ -229,6 +300,7 @@ function main() {
     const synced = syncMemoryFiles();
     const aeonCount = syncAeonLogs();
     const claudeSynced = syncClaudeMd();
+    const kanedaCount = syncKanedaWorkspace();
     writeDailyNote();
 
     if (synced.length > 0) {
@@ -242,6 +314,7 @@ function main() {
     const parts = [`${synced.length} memory`];
     if (aeonCount > 0) parts.push(`${aeonCount} aeon logs`);
     if (claudeSynced) parts.push('CLAUDE.md');
+    if (kanedaCount > 0) parts.push(`${kanedaCount} kaneda files`);
     const gdrivePart = gdriveStatus === 'started' ? ' + gdrive backup' : '';
     process.stderr.write(`[memory-sync] Synced ${parts.join(' + ')} → Obsidian. MindMap.md updated.${gdrivePart}\n`);
   } catch (err) {
