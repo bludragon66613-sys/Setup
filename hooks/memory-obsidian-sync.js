@@ -167,6 +167,7 @@ const KANEDA_VAULT = path.join(MEMORY_VAULT, 'agents');
 const KANEDA_EXCLUDE_TOP = new Set(['.git', '.openclaw', 'tmp', 'node_modules']);
 const KANEDA_INCLUDE_FILES = [
   'MEMORY.md',
+  'INDEX.md',
   'PROGRAM.md',
   'ROADMAP.md',
   'HEARTBEAT.md',
