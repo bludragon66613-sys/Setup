@@ -182,6 +182,7 @@ const KANEDA_INCLUDE_DIRS = [
   'clawchief',
   'knowledge-base',
   'evals',
+  'scripts',
 ];
 
 function copyDirRecursive(src, dest) {
