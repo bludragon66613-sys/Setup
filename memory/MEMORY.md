@@ -19,6 +19,8 @@
 - [SSquare website](project_ssquare.md) — Hyderabad commercial property dev-builder site; repo `bludragon66613-sys/Ssquare`; worktrees at ~/ssquare-claude (claude/main) + ~/ssquare-codex (codex/main); spec locked Direction E
 - [Kaneda workspace](project_kaneda_workspace.md) — Telegram bot @kaneda6bot, ~/.openclaw/workspace, Spike self-improvement loop ported 2026-05-10 (PROGRAM/ROADMAP/clawchief/evals/KB + vault round-trip)
 - [react-doctor CI](project_react_doctor.md) — react-doctor lint+score adopted 2026-05-11 across Ssquare/NERV_02/nerv-dashboard; all 3 repos at 100/100 with fail-on:warning gates active
+- [drip.markets platform](project_drip.md) — Solana peptide+creator platform; repo `bludragon66613-sys/Drip`; co-founder Matteo (cybergenesis621); 9 workspace pkgs; Phase 0.5 retro complete, Aurora ingest landed PR #10 (2026-05-11); migrations 0019-0026 staged not yet applied to Neon prod
+- [drip 2026-05-11 Aurora merge](session_savepoint_2026-05-11_drip-aurora-merge.md) — PR #10 unblock: db test top-level exit fix, @drip/aurora .js-suffix strip, transpilePackages add, commit-author workaround for Vercel GH-identity gate; PR #11 env doc; Issue #6 closed; master tip f147215
 
 ## Reference
 - [Infra ports](reference_infra.md) — OpenClaw :18789, n8n :5678, Paperclip :3100, dashboard :5555
