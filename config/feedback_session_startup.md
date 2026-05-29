@@ -61,7 +61,7 @@ The startup script runs orphan cleanup first, before starting any services:
 - Runs on **SessionStart** and **Stop** hooks via `memory-obsidian-sync.js`
 - Also runs in `startup-services.sh`
 - Syncs: memory files, Aeon logs, CLAUDE.md, daily note
-- Vault: `~/OneDrive/Documents/Agentic knowledge/`
+- Vault: `~/OneDrive/Documents/Vault/`
   - `Memory/` — all Claude memory .md files
   - `Aeon Logs/` — daily Aeon activity logs
   - `CLAUDE.md` — master project config

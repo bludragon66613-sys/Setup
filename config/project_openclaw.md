@@ -2,8 +2,8 @@
 name: project-openclaw
 description: OpenClaw local AI gateway — config, auth, Telegram bot setup, startup procedure, token refresh
 type: project
+originSessionId: 3f8d3313-13e8-4a91-80a7-23a5a65ef3fb
 ---
-
 ## OpenClaw — Local AI Gateway for Telegram Bot
 
 OpenClaw runs locally and connects the Telegram bot (@kaneda6bot) to AI models.
@@ -17,14 +17,15 @@ OpenClaw runs locally and connects the Telegram bot (@kaneda6bot) to AI models.
 **Quick health check:** `bash ~/openclaw-healthcheck.sh` (checks everything + auto-fixes)
 **Manual check:** `openclaw status` then `openclaw models status`
 
-## Current Auth State (as of 2026-04-03)
-- **Primary:** `anthropic/claude-sonnet-4-6`
-- **Fallback chain:** `openrouter/qwen/qwen3.6-plus:free` → `openai-codex/gpt-5.4-mini` → `google/gemini-2.5-flash` → `google/gemini-2.5-flash-lite`
-- **Auth:** `openai-codex:default` OAuth — EXPIRED (refresh_token_reused), needs re-login
-- **Anthropic auth:** Two static tokens (`anthropic:claude` and `anthropic:default`) in auth-profiles.json
-- **Google auth:** `google:aistudio` static API key (free tier, no expiry)
-- **OpenRouter auth:** `openrouter:manual` static API key (free tier, added 2026-04-03)
-- **Qwen 3.6 Plus notes:** Free preview tier, text-only (no image), 195k ctx on OpenRouter (1M native). Free tier sends data to Alibaba for training.
+## Current Auth State (as of 2026-05-11, 06:46)
+- **Primary:** `openai-codex/gpt-5.5` (oauth, 2 profiles 8-9d left) — verified live in TG via `openclaw status --deep` Sessions table
+- **Fallback 1:** `openrouter/z-ai/glm-5.1` (paid, $1.05/M prompt via env OPENROUTER_API_KEY)
+- **No anthropic configured** — Opus OAuth path is ToS gray (Claude Pro token in third-party gateway = ban risk). Future re-add: use console API key `sk-ant-api03-` (~$1-3/mo for fallback volume), not `claude setup-token` OAuth.
+- **Bot:** `@kaneda_clawbot` (NOT `@kaneda6bot` — older notes outdated)
+- **Verifying which model fires in TG:** `openclaw status --deep` Sessions section shows model-per-recent-chat. Logs emit outbound `sendMessage` only — NOT inbound updates — so tailing log won't show received msgs. Cache lie problem (bot answers "I'm Sonnet/Claude") = model's training-data lying, not openclaw routing.
+- **Restart caveat:** `openclaw gateway restart` sometimes leaves TG provider zombie (logs "starting provider" but no polling resume). If `pending_update_count` stays 0 AND no Sessions activity post-restart, run restart again.
+- **OpenAI codex auth:** Two OAuth profiles — `bludragon66613@gmail.com` + `bludragon666333@gmail.com`, both ok ~9d remaining (cooldown ~1h between them)
+- **OpenRouter auth:** API key via env `OPENROUTER_API_KEY` (sk-or-v1...87575c24), shared with perplexity provider
 - **Pending:** Add `google/gemma-4-31b-it` when it lands in OpenClaw catalog (Gemma 4 released 2026-04-02, free)
 - **Memory search:** Disabled (no embedding provider configured)
 - **Config:** `~/.openclaw/openclaw.json`

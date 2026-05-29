@@ -25,7 +25,7 @@ Globally installed via `npm i -g @steipete/summarize`.
 - `sumvault <url> [length] [tag]` — summarize and save to Obsidian vault
 
 **Vault integration:** `~/.local/bin/sum-to-vault.sh`
-- Saves to `~/OneDrive/Documents/Agentic knowledge/summaries/`
+- Saves to `~/OneDrive/Documents/Vault/summaries/`
 - Frontmatter: title, source, date, type, length, tags
 
 **API keys** (in `~/.bashrc`):

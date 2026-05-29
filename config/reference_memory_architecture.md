@@ -12,7 +12,7 @@ type: reference
 - continuous-learning-v2 hooks for pattern extraction
 
 **Layer 2 — Knowledge Graph:**
-- Obsidian vault: `~/OneDrive/Documents/Agentic knowledge/`
+- Obsidian vault: `~/OneDrive/Documents/Vault/`
 - qmd MCP: semantic search (BM25 + vector embeddings), 2 collections (obsidian + vault)
 - `@modelcontextprotocol/server-memory` MCP: entity/relation knowledge graph at `~/.claude/memory-graph/knowledge.json`
 - arscontexta plugin: knowledge architecture
