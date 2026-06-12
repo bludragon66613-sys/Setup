@@ -14,6 +14,12 @@ const MEMORY_DIR = claudeMemoryDir();
 const VAULT_BASE = vaultBase();
 const MEMORY_VAULT = path.join(VAULT_BASE, 'Memory');
 const MEMORY_PROJECTS = path.join(MEMORY_VAULT, 'projects');
+// All per-directory memory silos live under ~/.claude/projects/<key>/memory.
+// Claude Code keys memory by launch directory, so learnings scatter across many
+// silos; the hook used to read only one. Scan them all → nothing stays siloed.
+const PROJECTS_ROOT = path.join(HOME, '.claude', 'projects');
+// High-value learnings get promoted into the knowledge graph (qmd-indexed, linked).
+const LEARNINGS_VAULT = path.join(VAULT_BASE, 'wiki', 'learnings');
 // Agents are NOT synced to vault — canonical source is ~/.claude/agents/
 // and backed up to Setup/agents/ on GitHub. No duplication.
 const AEON_LOGS_DIR = path.join(HOME, 'aeon', 'memory', 'logs');
@@ -34,21 +40,54 @@ function parseFrontmatter(raw) {
   return { meta, body: match[2].trim() };
 }
 
+// Every ~/.claude/projects/<key>/memory dir that exists, plus the canonical one.
+function allMemoryDirs() {
+  const dirs = new Set();
+  if (fs.existsSync(PROJECTS_ROOT)) {
+    for (const entry of fs.readdirSync(PROJECTS_ROOT, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const md = path.join(PROJECTS_ROOT, entry.name, 'memory');
+      if (fs.existsSync(md)) dirs.add(md);
+    }
+  }
+  if (fs.existsSync(MEMORY_DIR)) dirs.add(MEMORY_DIR);
+  return [...dirs];
+}
+
+// A learning is high-value if its type is durable knowledge, or it is explicitly
+// flagged. Deterministic — no model call, predictable every run.
+function isHighValue(meta) {
+  const type = String(meta.type || '').toLowerCase();
+  if (['feedback', 'decision', 'reference'].includes(type)) return true;
+  const value = String(meta.value || '').toLowerCase();
+  if (value === 'high' || value === 'critical') return true;
+  const priority = String(meta.priority || '').toLowerCase();
+  if (priority && !['no', 'false', 'low', ''].includes(priority)) return true;
+  return false;
+}
+
 function syncMemoryFiles() {
-  if (!fs.existsSync(MEMORY_DIR)) return [];
   fs.mkdirSync(MEMORY_VAULT, { recursive: true });
   fs.mkdirSync(MEMORY_PROJECTS, { recursive: true });
 
-  const files = fs.readdirSync(MEMORY_DIR).filter(f => f.endsWith('.md'));
+  // Merge all silos, deduped by filename (= the `name` slug by convention).
+  // On collision the newest source wins. MEMORY.md is a per-silo index, not a learning.
+  const byFile = new Map();
+  for (const dir of allMemoryDirs()) {
+    for (const file of fs.readdirSync(dir).filter(f => f.endsWith('.md'))) {
+      if (file === 'MEMORY.md') continue;
+      const src = path.join(dir, file);
+      let mtime;
+      try { mtime = fs.statSync(src).mtimeMs; } catch { continue; }
+      const prev = byFile.get(file);
+      if (!prev || mtime > prev.mtime) byFile.set(file, { src, mtime });
+    }
+  }
+
   const synced = [];
-
-  for (const file of files) {
-    const src = path.join(MEMORY_DIR, file);
-    const dest = path.join(MEMORY_VAULT, file);
-    fs.copyFileSync(src, dest);
+  for (const [file, { src }] of byFile) {
+    fs.copyFileSync(src, path.join(MEMORY_VAULT, file));
     synced.push(file);
-
-    // Also mirror project_* files to Memory/projects/ subdirectory
     if (file.startsWith('project_')) {
       fs.copyFileSync(src, path.join(MEMORY_PROJECTS, file));
     }
@@ -60,7 +99,7 @@ function syncMemoryFiles() {
 
 function buildMindMap(files) {
   const allFiles = files.map(f => {
-    const raw = fs.readFileSync(path.join(MEMORY_DIR, f), 'utf8');
+    const raw = fs.readFileSync(path.join(MEMORY_VAULT, f), 'utf8');
     const { meta, body } = parseFrontmatter(raw);
     return { file: f, name: meta.name || f.replace('.md', ''), type: meta.type || 'unknown', description: meta.description || '', body };
   });
@@ -172,6 +211,8 @@ const KANEDA_INCLUDE_FILES = [
   'ROADMAP.md',
   'HEARTBEAT.md',
   'AGENTS.md',
+  'CLAUDE.md',
+  'VAULT.md',
   'SOUL.md',
   'IDENTITY.md',
   'USER.md',
@@ -184,11 +225,39 @@ const KANEDA_INCLUDE_DIRS = [
   'knowledge-base',
   'evals',
   'scripts',
+  'hooks',
   'memory',
+  'inbox',
+  'notes',
+  'ideas',
+  'briefs',
+  'wiki',
 ];
+const KANEDA_TEXT_EXTS = new Set(['.md', '.txt', '.json', '.jsonl', '.js', '.ts', '.mjs', '.yaml', '.yml', '.csv']);
+
+function shouldSkipKanedaPath(srcPath) {
+  const lower = srcPath.toLowerCase();
+  if (lower.includes('shueb.io')) return true;
+  const base = path.basename(srcPath).toLowerCase();
+  if (base.startsWith('.env') || base.includes('credentials')) return true;
+  return false;
+}
+
+function shouldSkipKanedaFile(srcPath) {
+  if (shouldSkipKanedaPath(srcPath)) return true;
+  const ext = path.extname(srcPath).toLowerCase();
+  if (!KANEDA_TEXT_EXTS.has(ext)) return false;
+  try {
+    const stat = fs.statSync(srcPath);
+    if (stat.size > 2 * 1024 * 1024) return false;
+    return fs.readFileSync(srcPath, 'utf8').toLowerCase().includes('shueb.io');
+  } catch {
+    return true;
+  }
+}
 
 function copyDirRecursive(src, dest) {
-  if (!fs.existsSync(src)) return 0;
+  if (!fs.existsSync(src) || shouldSkipKanedaPath(src)) return 0;
   fs.mkdirSync(dest, { recursive: true });
   let count = 0;
   for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
@@ -196,9 +265,10 @@ function copyDirRecursive(src, dest) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
     if (entry.isDirectory()) {
-      if (KANEDA_EXCLUDE_TOP.has(entry.name)) continue;
+      if (KANEDA_EXCLUDE_TOP.has(entry.name) || shouldSkipKanedaPath(srcPath)) continue;
       count += copyDirRecursive(srcPath, destPath);
     } else if (entry.isFile()) {
+      if (shouldSkipKanedaFile(srcPath)) continue;
       fs.copyFileSync(srcPath, destPath);
       count++;
     }
@@ -255,8 +325,8 @@ function writeDailyNote() {
     `## Memory Files`,
   ];
 
-  if (fs.existsSync(MEMORY_DIR)) {
-    const files = fs.readdirSync(MEMORY_DIR).filter(f => f.endsWith('.md') && !f.startsWith('session_savepoint'));
+  if (fs.existsSync(MEMORY_VAULT)) {
+    const files = fs.readdirSync(MEMORY_VAULT).filter(f => f.endsWith('.md') && !f.startsWith('session_savepoint'));
     for (const f of files) {
       lines.push(`- [[Memory/${f.replace('.md', '')}]]`);
     }
@@ -277,10 +347,83 @@ function writeDailyNote() {
   return true;
 }
 
+// Promote high-value learnings from the merged Memory set into the knowledge
+// graph at wiki/learnings/, with a backlink to the Memory source. Idempotent:
+// rewrites the curated copies + index every run so they stay fresh.
+function promoteHighValue(syncedFiles) {
+  fs.mkdirSync(LEARNINGS_VAULT, { recursive: true });
+  const promoted = [];
+  const today = new Date().toISOString().slice(0, 10);
+
+  for (const file of syncedFiles) {
+    if (file.startsWith('session_savepoint')) continue;
+    let raw;
+    try { raw = fs.readFileSync(path.join(MEMORY_VAULT, file), 'utf8'); } catch { continue; }
+    const { meta, body } = parseFrontmatter(raw);
+    if (!isHighValue(meta)) continue;
+
+    const slug = file.replace('.md', '');
+    const name = meta.name || slug;
+    const type = meta.type || 'learning';
+    const desc = meta.description || '';
+    const out = [
+      '---',
+      `name: ${name}`,
+      `type: ${type}`,
+      desc ? `description: ${desc}` : null,
+      `source: "[[Memory/${slug}]]"`,
+      `promoted: ${today}`,
+      '---',
+      '',
+      body,
+      '',
+      '---',
+      `> High-value ${type} promoted from [[Memory/${slug}]] · [[MindMap]]`,
+    ].filter(l => l !== null).join('\n');
+
+    fs.writeFileSync(path.join(LEARNINGS_VAULT, file), out);
+    promoted.push({ file, name, type, desc });
+  }
+
+  writeLearningsIndex(promoted);
+  return promoted;
+}
+
+function writeLearningsIndex(promoted) {
+  const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  const byType = {};
+  for (const p of promoted) (byType[p.type] ||= []).push(p);
+
+  const lines = [
+    '# 🎓 High-Value Learnings',
+    '',
+    `> Auto-promoted from Claude memory by memory-obsidian-sync.js. Last updated: **${now} IST**`,
+    `> ${promoted.length} learnings across ${Object.keys(byType).length} types.`,
+    '',
+    '---',
+    '',
+  ];
+  for (const [type, items] of Object.entries(byType).sort()) {
+    lines.push(`## ${type} (${items.length})`);
+    lines.push('');
+    for (const p of items.sort((a, b) => a.name.localeCompare(b.name))) {
+      const d = p.desc ? ` — ${p.desc.slice(0, 80)}` : '';
+      lines.push(`- [[wiki/learnings/${p.file.replace('.md', '')}|${p.name}]]${d}`);
+    }
+    lines.push('');
+  }
+  fs.writeFileSync(path.join(LEARNINGS_VAULT, 'INDEX.md'), lines.join('\n'));
+}
+
 function syncToGoogleDrive() {
   const { execSync } = require('child_process');
   try {
     // Check if rclone is available and gdrive remote exists
+    try {
+      execSync('command -v rclone', { timeout: 5000, stdio: 'ignore' });
+    } catch {
+      return 'no rclone';
+    }
     const remotes = execSync('rclone listremotes', { timeout: 5000 }).toString();
     if (!remotes.includes('gdrive:')) return 'no remote';
 
@@ -301,6 +444,7 @@ function syncToGoogleDrive() {
 function main() {
   try {
     const synced = syncMemoryFiles();
+    const promoted = promoteHighValue(synced);
     const aeonCount = syncAeonLogs();
     const claudeSynced = syncClaudeMd();
     const kanedaCount = syncKanedaWorkspace();
@@ -315,6 +459,7 @@ function main() {
     const gdriveStatus = syncToGoogleDrive();
 
     const parts = [`${synced.length} memory`];
+    if (promoted.length > 0) parts.push(`${promoted.length} high-value→wiki/learnings`);
     if (aeonCount > 0) parts.push(`${aeonCount} aeon logs`);
     if (claudeSynced) parts.push('CLAUDE.md');
     if (kanedaCount > 0) parts.push(`${kanedaCount} kaneda files`);
