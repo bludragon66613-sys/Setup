@@ -311,6 +311,19 @@ else
   echo "  ⚠ ~/.claude.json not found — configure MCP after first claude session"
 fi
 
+# ── Restore Global Gitignore ───────────────────────────────────────
+# Keeps tooling artifacts (.omc/, .DS_Store, .claude/, .superpowers/) out of
+# every repo's git status without per-repo .gitignore edits.
+echo "→ Restoring global gitignore..."
+if [ -f "${SETUP_DIR}/config/git-ignore-global" ]; then
+  mkdir -p "${HOME}/.config/git"
+  cp "${SETUP_DIR}/config/git-ignore-global" "${HOME}/.config/git/ignore"
+  git config --global core.excludesfile "${HOME}/.config/git/ignore"
+  echo "  ✓ global gitignore deployed + core.excludesfile set"
+else
+  echo "  ⚠ config/git-ignore-global missing — skipping"
+fi
+
 # ── Summary ────────────────────────────────────────────────────────
 echo ""
 echo "╔═══════════════════════════════════════════╗"
