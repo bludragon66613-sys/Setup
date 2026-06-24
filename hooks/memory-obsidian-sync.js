@@ -441,6 +441,26 @@ function syncToGoogleDrive() {
   }
 }
 
+// Persist the vault to git. Sync writes files but nothing committed them, so the
+// vault accumulated uncommitted for days. Guarded on dirty, spawned detached so it
+// never blocks the hook; failures are non-fatal (next run catches up).
+function commitVaultToGit() {
+  const { execSync, spawn } = require('child_process');
+  try {
+    if (!fs.existsSync(path.join(VAULT_BASE, '.git'))) return 'no git';
+    const dirty = execSync('git status --porcelain', { cwd: VAULT_BASE, timeout: 8000 }).toString().trim();
+    if (!dirty) return 'clean';
+    const stamp = new Date().toISOString().replace('T', ' ').slice(0, 16);
+    const child = spawn('bash', ['-c',
+      `git add -A && git commit -q -m "chore: auto-sync vault ${stamp}" && git push origin HEAD`,
+    ], { cwd: VAULT_BASE, detached: true, stdio: 'ignore' });
+    child.unref();
+    return 'started';
+  } catch {
+    return 'skipped';
+  }
+}
+
 function main() {
   try {
     const synced = syncMemoryFiles();
@@ -457,6 +477,8 @@ function main() {
 
     // Mirror to Google Drive as backup
     const gdriveStatus = syncToGoogleDrive();
+    // Persist vault to git (detached, guarded on dirty)
+    const gitStatus = commitVaultToGit();
 
     const parts = [`${synced.length} memory`];
     if (promoted.length > 0) parts.push(`${promoted.length} high-value→wiki/learnings`);
@@ -464,7 +486,8 @@ function main() {
     if (claudeSynced) parts.push('CLAUDE.md');
     if (kanedaCount > 0) parts.push(`${kanedaCount} kaneda files`);
     const gdrivePart = gdriveStatus === 'started' ? ' + gdrive backup' : '';
-    process.stderr.write(`[memory-sync] Synced ${parts.join(' + ')} → Obsidian. MindMap.md updated.${gdrivePart}\n`);
+    const gitPart = gitStatus === 'started' ? ' + git commit+push' : '';
+    process.stderr.write(`[memory-sync] Synced ${parts.join(' + ')} → Obsidian. MindMap.md updated.${gdrivePart}${gitPart}\n`);
   } catch (err) {
     process.stderr.write(`[memory-sync] Error: ${err.message}\n`);
   }
