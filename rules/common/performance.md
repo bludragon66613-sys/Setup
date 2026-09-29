@@ -2,17 +2,17 @@
 
 ## Model Selection Strategy
 
-**Haiku 4.5** (90% of Sonnet capability, 3x cost savings):
+**Haiku 4.5** (`haiku` alias — cheapest, fastest):
 - Lightweight agents with frequent invocation
 - Pair programming and code generation
 - Worker agents in multi-agent systems
 
-**Sonnet 4.6** (Best coding model):
+**Sonnet 5.5** (`sonnet` alias — default workhorse):
 - Main development work
 - Orchestrating multi-agent workflows
 - Complex coding tasks
 
-**Opus 4.5** (Deepest reasoning):
+**Opus 5.5** (`opus` alias — deepest reasoning; also review, debugging, verification):
 - Complex architectural decisions
 - Maximum reasoning requirements
 - Research and analysis tasks
