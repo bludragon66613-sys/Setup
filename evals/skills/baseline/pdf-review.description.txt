@@ -1,0 +1,1 @@
+> Visually review a PDF page-by-page for alignment, typography, color, layout, and content issues. Use after generating or rebuilding any PDF (brand bibles, design docs, slide decks, reports) and before shipping it to a stakeholder. Renders each page to PNG, walks the agent through them visually, and produces a severity-ranked report.

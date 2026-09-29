@@ -1,0 +1,9 @@
+[
+ {"query": "get a second opinion from codex on my uncommitted changes", "should_trigger": true},
+ {"query": "run a gpt review on PR 42", "should_trigger": true},
+ {"query": "have OpenAI review feature/auth against main before I merge", "should_trigger": true},
+ {"query": "codex review src/payments/charge.ts please, focus on security", "should_trigger": true},
+ {"query": "review my PR", "should_trigger": false},
+ {"query": "use codex to implement the retry logic in the fetch client", "should_trigger": false},
+ {"query": "can you review the diff for bugs and then fix whatever you find", "should_trigger": false}
+]

@@ -1,0 +1,9 @@
+[
+ {"query": "I just rebuilt our brand bible with puppeteer, output is ~/Documents/fatfk/brand/bible.pdf. Can you check every page for layout or font problems before I send it to the client?", "should_trigger": true},
+ {"query": "is deck-v3.pdf ready to share? worried the page breaks split the pricing cards", "should_trigger": true},
+ {"query": "compare report-old.pdf and report-new.pdf visually and tell me if anything regressed after I changed the print CSS", "should_trigger": true},
+ {"query": "QA pass on the investor one-pager PDF I exported from Figma, colors look off to me", "should_trigger": true},
+ {"query": "extract all the text from invoices/march.pdf into a csv", "should_trigger": false},
+ {"query": "my react-pdf generator throws 'Cannot read properties of undefined (reading fontFamily)' when rendering, help me fix the code", "should_trigger": false},
+ {"query": "summarize the key findings of this research paper pdf for me", "should_trigger": false}
+]
