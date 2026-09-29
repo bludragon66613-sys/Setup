@@ -25,7 +25,7 @@ No user prompt needed:
 3. Bug fix or new feature - Use **test-engineer** agent
 4. Architectural decision - Use **architect** agent
 5. Any UI/frontend work - Use Impeccable skills (`/teach-impeccable` → `/audit` → `/arrange` → `/typeset` → `/colorize` → `/polish`)
-6. Design audit or UI polish - Use **ui-ux-architect** agent (has Impeccable + Pencil MCP built in)
+6. Design audit, UI polish, or UI build - Use **design-mastery** agent (AUDIT / BUILD / FULL LOOP modes)
 7. Working with `.pen` files - Use Pencil MCP tools (`mcp__pencil__*`), NEVER Read/Grep
 
 ## Parallel Task Execution

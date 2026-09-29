@@ -18,7 +18,7 @@ airbnb, airtable, apple, bmw, cal, claude, clay, clickhouse, cohere, coinbase, c
 ### Usage
 - Say "build with the Linear aesthetic" and the DESIGN.md gets loaded
 - Each brand has: DESIGN.md (15-20KB spec), preview.html, preview-dark.html
-- Works with ui-ux-architect agent, designer agent, and /design-review skill
+- Works with design-mastery agent and designer agent
 
 ### Update Command
 ```bash
