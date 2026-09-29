@@ -1,6 +1,6 @@
 ---
 name: gpt-review
-description: 'Run codex (OpenAI GPT) code review on the current uncommitted diff, a GitHub PR by number, a branch vs base, or specific files. Returns severity-tagged findings (CRITICAL/HIGH/MEDIUM/LOW) with file:line and fix suggestion. Triggers: gpt review, codex review, review with codex, review with gpt, second opinion review, OpenAI review of a diff/PR/branch/file. Read-only - does not apply fixes.'
+description: 'Run a code review through the local codex CLI (OpenAI GPT) on the uncommitted diff, a GitHub PR by number, a branch vs base, or specific files. Returns severity-tagged findings (CRITICAL/HIGH/MEDIUM/LOW) with file:line and a fix suggestion. Use when the user explicitly wants codex, GPT, or OpenAI to review, or asks for a second-opinion review from another model: "gpt review", "codex review", "review with codex/gpt", "get codex to check PR 42". Read-only, never applies fixes. Not for a plain "review my PR/diff" with no codex/GPT/second-model mention (use code-review), and not for using codex to write or fix code.'
 license: MIT
 ---
 
@@ -42,11 +42,20 @@ Given `$ARG` = the skill argument string:
 4. **`git rev-parse --verify "$ARG^{commit}"` succeeds** → **branch mode** (review HEAD vs $ARG).
 5. Otherwise → **ask the user** which mode they meant. Do not guess.
 
-Order matters: path check beats ref check, so a branch named after an existing file is treated as a path (safer — the user can re-invoke with `--branch` if needed).
+Order matters: path check beats ref check, so a branch named after an existing file is treated as a path (safer; the user can re-invoke and say they meant the branch).
 
-## Review prompt (write verbatim to a tmp file, then pass to codex)
+## Review prompt (write verbatim to a temp file, then pass to codex)
 
-Write this prompt to `/tmp/gpt-review-prompt-$$.txt` so shell quoting cannot corrupt it:
+Each Bash tool call runs in a fresh shell, so `$$` and shell variables do not survive between calls. Create the file once with `mktemp`, note the printed path, and use that literal path in every later command (shown below as `$PROMPT_FILE`; start each later call with `PROMPT_FILE=<that path>`). Alternatively run write + codex + cleanup in a single Bash call.
+
+```bash
+PROMPT_FILE=$(mktemp "${TMPDIR:-/tmp}/gpt-review-prompt.XXXXXX") && echo "$PROMPT_FILE"
+cat > "$PROMPT_FILE" <<'PROMPT'
+<prompt below, verbatim>
+PROMPT
+```
+
+Prompt text (the quoted heredoc keeps shell quoting from corrupting it):
 
 ```text
 You are a senior code reviewer. Review the provided changes for defects.
@@ -74,10 +83,12 @@ TOTAL: <n> CRITICAL, <n> HIGH, <n> MEDIUM, <n> LOW.
 
 ## Invocations per mode
 
+Model: codex uses its configured default. Only if the user names a model, add `-c model="<name>"` right after the subcommand (`codex review -c model="<name>" ...`, `codex exec -c model="<name>" -`). That is the config override documented in `codex --help`; `codex exec` also accepts `-m <name>`, `codex review` does not.
+
 ### Mode 1 — uncommitted
 
 ```bash
-codex review --uncommitted "$(cat /tmp/gpt-review-prompt-$$.txt)"
+codex review --uncommitted "$(cat "$PROMPT_FILE")"
 ```
 
 ### Mode 2 — PR by number
@@ -86,7 +97,7 @@ codex review --uncommitted "$(cat /tmp/gpt-review-prompt-$$.txt)"
 
 ```bash
 {
-  cat /tmp/gpt-review-prompt-$$.txt
+  cat "$PROMPT_FILE"
   printf '\n\n--- BEGIN PR #%s DIFF ---\n' "$PR"
   gh pr diff "$PR"
   printf '\n--- END DIFF ---\n'
@@ -98,14 +109,14 @@ If `gh pr diff` returns empty or errors, surface the error and stop — do not r
 ### Mode 3 — branch vs base
 
 ```bash
-codex review --base "$BRANCH" "$(cat /tmp/gpt-review-prompt-$$.txt)"
+codex review --base "$BRANCH" "$(cat "$PROMPT_FILE")"
 ```
 
 ### Mode 4 — paths
 
 ```bash
 {
-  cat /tmp/gpt-review-prompt-$$.txt
+  cat "$PROMPT_FILE"
   printf '\n\nReview the following file(s):\n'
   for f in "${PATHS[@]}"; do
     if [ -d "$f" ]; then
@@ -134,16 +145,15 @@ codex review --base "$BRANCH" "$(cat /tmp/gpt-review-prompt-$$.txt)"
 ## Cleanup
 
 ```bash
-rm -f /tmp/gpt-review-prompt-$$.txt
+rm -f "$PROMPT_FILE"
 ```
 
 ## Failure modes
 
+Missing codex / not logged in / missing gh: the prereq block above prints the install or login command; relay it and stop.
+
 | Symptom | Action |
 | --- | --- |
-| `codex: command not found` | Tell user: `npm install -g @openai/codex` |
-| `codex login status` not logged in | Tell user: `codex login` |
-| `gh` missing in PR mode | Tell user: `brew install gh && gh auth login` |
 | Empty diff (uncommitted/PR/branch) | Print "No changes to review." and stop. Do not call codex. |
 | codex exits non-zero | Print stderr verbatim, do not pretend the review succeeded |
 | Output has zero severity-prefixed lines | Tell user: "codex returned no structured findings — raw output below:" then dump output |
@@ -152,4 +162,4 @@ rm -f /tmp/gpt-review-prompt-$$.txt
 
 - Read-only. Never mutates the working tree, never runs `gh pr checkout`, never auto-applies fixes.
 - The review prompt is fixed in this skill on purpose — consistent output format across runs.
-- If the user wants a different review focus (e.g. only security), they should say so; append their extra instructions to the tmp prompt file **before** the severity rules, never after.
+- If the user wants a different review focus (e.g. only security), they should say so; append their extra instructions to the prompt file **before** the severity rules, never after.

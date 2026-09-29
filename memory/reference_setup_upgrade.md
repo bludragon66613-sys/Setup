@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: reference
   originSessionId: 0bdd288b-88d7-4274-89b1-301688ba4971
-  modified: 2026-09-29T14:04:19.544Z
+  modified: 2026-09-29T14:22:53.155Z
 ---
 
 Recurring "look for updates and upgrade my setup" task. Three independent layers:
@@ -15,7 +15,8 @@ Recurring "look for updates and upgrade my setup" task. Three independent layers
 - The real refresh is **`omc setup`** — version-aware sync of hooks/agents/skills/CLAUDE.md/HUD. It merges CLAUDE.md (backs up old to `CLAUDE.md.backup.<ts>`) and **preserves custom non-OMC hooks** (memory-obsidian-sync.js, web-ingest-to-vault.js) by skipping them without `--force-hooks`. So default `omc setup` is safe — does not clobber custom config.
 - Verify after: diff CLAUDE.md vs the `.backup` — should only show the `OMC:VERSION` stamp change.
 - **Then run `bash ~/Documents/Setup/bin/agent-model-pins.sh`** — `omc setup` re-pins the 19 OMC agents to old model IDs; script restores `opus`/`sonnet`/`haiku` aliases (debugger/verifier/tracer forced to opus, set 2026-09-29). Exits 1 if any pin remains.
-- OMC 5.x major available as of 2026-09-29 (installed 4.15.0) — read changelog before upgrading.
+- **Hook trap (seen 4.15→5.5, 2026-09-29):** `omc setup` "cleans up legacy hook entries" (removes OMC's own `session-start.mjs`, `post-tool-use.mjs`, `persistent-mode.mjs`, `code-simplifier.mjs` entries from settings.json) and then SKIPS reinstalling them on SessionStart/PostToolUse/Stop because the custom vault hooks share those events. The .mjs files stay in `~/.claude/hooks/`. After setup, diff settings.json hook commands vs pre-setup backup and re-add missing OMC entries alongside the custom ones. Never use `--force-hooks` (clobbers custom hooks).
+- Upgraded to OMC 5.5.0 on 2026-09-29. 5.0 retired 17 skills (ultrawork, ultraqa, ccg, sciomc, deep-dive, omc-teams, learner, writer-memory, omc-reference…) — canonical flow is plan → execute → review → verify; see `docs/MIGRATION.md` in the OMC repo. Agent model pins were NOT rewritten by 5.5 setup, but keep running the pin script.
 
 **Plugins (`claude plugin ...`)**
 - Refresh first: `claude plugin marketplace update` (all sources, no name arg).

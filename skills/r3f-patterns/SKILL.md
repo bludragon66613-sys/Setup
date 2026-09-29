@@ -207,7 +207,7 @@ Effects share render passes — order matters (DoF before Bloom before grain). F
 9. **`shadows={false}` by default.** Shadows are ~2x cost. Use drei `<ContactShadows>` (cheap fake) for grounding.
 10. **`flat` for stylized / non-realistic.** Skip `ACESFilmicToneMapping` overhead.
 11. **`useFrame` priority param** — split render across multiple frames using priority order. Bigger number = later.
-12. **React 18 `startTransition`** for expensive scene updates — keeps 60fps.
+12. **`startTransition` from `react`** (React 18+, same API in React 19, which also accepts async callbacks) for expensive scene updates. Keeps 60fps.
 
 ## Next.js / Vite Gotchas
 
