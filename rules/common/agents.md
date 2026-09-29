@@ -8,13 +8,13 @@ Located in `~/.claude/agents/`:
 |-------|---------|-------------|
 | planner | Implementation planning | Complex features, refactoring |
 | architect | System design | Architectural decisions |
-| tdd-guide | Test-driven development | New features, bug fixes |
+| test-engineer | Test-driven development, test strategy | New features, bug fixes |
 | code-reviewer | Code review | After writing code |
 | security-reviewer | Security analysis | Before commits |
-| build-error-resolver | Fix build errors | When build fails |
+| debugger | Fix build errors, root-cause bugs | When build fails |
 | e2e-runner | E2E testing | Critical user flows |
 | refactor-cleaner | Dead code cleanup | Code maintenance |
-| doc-updater | Documentation | Updating docs |
+| writer | Documentation | Updating docs |
 | rust-reviewer | Rust code review | Rust projects |
 
 ## Immediate Agent Usage
@@ -22,7 +22,7 @@ Located in `~/.claude/agents/`:
 No user prompt needed:
 1. Complex feature requests - Use **planner** agent
 2. Code just written/modified - Use **code-reviewer** agent
-3. Bug fix or new feature - Use **tdd-guide** agent
+3. Bug fix or new feature - Use **test-engineer** agent
 4. Architectural decision - Use **architect** agent
 5. Any UI/frontend work - Use Impeccable skills (`/teach-impeccable` → `/audit` → `/arrange` → `/typeset` → `/colorize` → `/polish`)
 6. Design audit or UI polish - Use **ui-ux-architect** agent (has Impeccable + Pencil MCP built in)

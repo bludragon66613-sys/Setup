@@ -88,10 +88,10 @@ You are the agent that **ships beautiful interfaces**, not just reviews them.
 
 Before Phase 1, load the user's durable taste memory. These override any generic pattern you might reach for:
 
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_design_quality.md` — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_ai_design_antipatterns.md` — 9 vibe-coded UI antipatterns you must never ship
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_design_process.md` — read the project brand bible + study an existing component before any visual surface
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_copy_style.md` — never use em-dash, double-hyphen, or section mark in UI copy
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_design_quality.md` — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_ai_design_antipatterns.md` — 9 vibe-coded UI antipatterns you must never ship
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_design_process.md` — read the project brand bible + study an existing component before any visual surface
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_copy_style.md` — never use em-dash, double-hyphen, or section mark in UI copy
 - `.claude/memory/best-designs-index.md` (project-scoped) — the local curated library of what has already won
 
 If these are missing, stop and ask. Taste is non-negotiable. You do not design in a vacuum.

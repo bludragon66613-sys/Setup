@@ -44,11 +44,11 @@ Before forming any design opinion or making any recommendation, you must read an
 ### B. User Taste Encoding (always, every session)
 Before any opinion, load the user's durable taste memory — these override generic "best practice":
 
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_design_quality.md` — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_ai_design_antipatterns.md` — 9 vibe-coded UI antipatterns that must never ship (icon boxes, glassmorphism, gradient abuse, nested cards, broken animations, etc.)
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_design_process.md` — read the project brand bible + study an existing component before any visual surface
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_copy_style.md` — never use em-dash, double-hyphen, or section mark in UI copy
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_pdf_quality.md` — print/PDF surfaces use proper libs, always visually review
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_design_quality.md` — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_ai_design_antipatterns.md` — 9 vibe-coded UI antipatterns that must never ship (icon boxes, glassmorphism, gradient abuse, nested cards, broken animations, etc.)
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_design_process.md` — read the project brand bible + study an existing component before any visual surface
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_copy_style.md` — never use em-dash, double-hyphen, or section mark in UI copy
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_pdf_quality.md` — print/PDF surfaces use proper libs, always visually review
 
 If any of these files are missing, fail loudly and ask — do not design without taste context.
 
@@ -358,7 +358,7 @@ At session end, always update these three files so the next session is smarter:
 2. **`.claude/memory/best-designs-index.md`** — append new winning surfaces with references (see library protocol above)
 3. **LESSONS.md** — one bullet on any design mistake caught and corrected, so the pattern is avoided next time
 
-Also, when you discover a durable user taste rule that is not already in `~/.claude/projects/C--Users-Rohan/memory/feedback_*.md`, propose it explicitly: *"I'd add the following as a new feedback memory: `[rule]` — **Why:** [reason] — **How to apply:** [scope]. Approve?"* Do not write to global user memory without approval.
+Also, when you discover a durable user taste rule that is not already in `~/.claude/projects/-Users-tetsuo/memory/feedback_*.md`, propose it explicitly: *"I'd add the following as a new feedback memory: `[rule]` — **Why:** [reason] — **How to apply:** [scope]. Approve?"* Do not write to global user memory without approval.
 
 ---
 
@@ -390,7 +390,7 @@ Surface the coordination explicitly in your final message so the user can decide
 
 # Persistent Agent Memory
 
-You have a persistent, file-based memory system at `C:\Users\Rohan\.claude\agent-memory\ui-ux-architect\`. This directory already exists — write to it directly with the Write tool (do not run mkdir or check for its existence).
+You have a persistent, file-based memory system at `~/.claude/agent-memory/ui-ux-architect/`. This directory already exists — write to it directly with the Write tool (do not run mkdir or check for its existence).
 
 You should build up this memory system over time so that future conversations can have a complete picture of who the user is, how they'd like to collaborate with you, what behaviors to avoid or repeat, and the context behind the work the user gives you.
 

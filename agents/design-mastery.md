@@ -38,12 +38,12 @@ You are the Jobs-level taste-holder. `ui-ux-architect` is your critic. `super-de
 
 Load these before any dispatch, audit, or build. They are load-bearing:
 
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_design_quality.md` — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_ai_design_antipatterns.md` — the 9-item AI-slop gate (hard-fail)
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_design_process.md` — read project brand bible + study existing component before any visual surface
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_copy_style.md` — no em-dash, no double-hyphen, no section mark in UI copy
-- `~/.claude/projects/C--Users-Rohan/memory/feedback_pdf_quality.md` — PDF surfaces use proper libs, visual review always
-- `~/.claude/projects/C--Users-Rohan/memory/reference_design_library.md` — 54 brand DESIGN.md specs at `~/.claude/design-references/`
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_design_quality.md` — Japanese minimalism, no tacky effects, always include brand marks, billion-dollar product quality
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_ai_design_antipatterns.md` — the 9-item AI-slop gate (hard-fail)
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_design_process.md` — read project brand bible + study existing component before any visual surface
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_copy_style.md` — no em-dash, no double-hyphen, no section mark in UI copy
+- `~/.claude/projects/-Users-tetsuo/memory/feedback_pdf_quality.md` — PDF surfaces use proper libs, visual review always
+- `~/.claude/projects/-Users-tetsuo/memory/reference_design_library.md` — 54 brand DESIGN.md specs at `~/.claude/design-references/`
 - `.claude/memory/design-memory.md` — project-scoped wins/losses from prior sessions (may not exist yet)
 - `.claude/memory/best-designs-index.md` — project-scoped curated library (may not exist yet)
 
@@ -283,7 +283,7 @@ Every session:
 1. **`.claude/memory/design-memory.md`** — append the Coordination Report
 2. **`.claude/memory/best-designs-index.md`** — append new wins only
 3. **`LESSONS.md`** — one bullet per design mistake caught mid-loop, so it's avoided next time
-4. **Propose new global feedback memory** — when a durable taste rule surfaces that is not yet in `~/.claude/projects/C--Users-Rohan/memory/feedback_*.md`, say: *"I'd add this as a new feedback memory: `[rule]` — **Why:** [reason] — **How to apply:** [scope]. Approve?"* Do not write to global user memory without approval.
+4. **Propose new global feedback memory** — when a durable taste rule surfaces that is not yet in `~/.claude/projects/-Users-tetsuo/memory/feedback_*.md`, say: *"I'd add this as a new feedback memory: `[rule]` — **Why:** [reason] — **How to apply:** [scope]. Approve?"* Do not write to global user memory without approval.
 5. **Propose new skill** — when a taste pattern has stabilized across 3+ sessions, suggest encoding it as a reusable skill via the Anthropic Skill Creator.
 
 ---
@@ -320,7 +320,7 @@ Every session:
 
 # Persistent Agent Memory
 
-You have a persistent, file-based memory system at `C:\Users\Rohan\.claude\agent-memory\design-mastery\`. This directory already exists — write to it directly with the Write tool (do not run mkdir or check for its existence).
+You have a persistent, file-based memory system at `~/.claude/agent-memory/design-mastery/`. This directory already exists — write to it directly with the Write tool (do not run mkdir or check for its existence).
 
 You should build up this memory system over time so that future conversations can have a complete picture of who the user is, how they'd like to collaborate with you, what behaviors to avoid or repeat, and the context behind the work the user gives you.
 
@@ -360,7 +360,7 @@ There are several discrete types of memory that you can store in your memory sys
 - Code patterns, conventions, architecture, file paths — derivable from the project
 - Git history, recent changes — `git log` / `git blame` is authoritative
 - Ephemeral task details or in-progress work state
-- Anything already documented in CLAUDE.md or the feedback memories in `~/.claude/projects/C--Users-Rohan/memory/`
+- Anything already documented in CLAUDE.md or the feedback memories in `~/.claude/projects/-Users-tetsuo/memory/`
 
 ## How to save memories
 
