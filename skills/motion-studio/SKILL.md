@@ -32,6 +32,7 @@ Adapted from beamnxw's "Motion Engineering with Opus 5.5" workflow (x.com/beamnx
 - `sound-effects` — measured sound pass
 - `animate` / `apple-design` — motion decision order, springs
 - `taste-skill` (design-taste-frontend) — anti-slop art direction for any web frontend
+- `remotion-*` (12 official skills, installed globally) — `remotion-create` (scaffold), `remotion-best-practices`, `remotion-render`, `remotion-multimedia` (audio/video embedding), `remotion-captions`, `remotion-interactivity`, `remotion-studio`, `remotion-docs`, etc. Prefer these over `npx remotion skills add` per project.
 
 ## Core discipline: frames are the contract
 
@@ -52,7 +53,7 @@ npm run dev
 
 Layout: assets in `public/`, reference video at `reference.mp4`, brief at `BRIEF.md`, extracted frames in `frames/`, exports in `out/`.
 
-Note (this Mac): `ffprobe` not installed — use `ffmpeg -i file.mp4` for metadata instead of ffprobe commands.
+Toolchain (this Mac): ffmpeg 7.1.1 + ffprobe (npm ffprobe-static, symlinked ~/.local/bin) + svgo, all global.
 
 ### 2. Reference analysis (give the reference ONE job)
 
@@ -101,7 +102,7 @@ Locate the audible hit in the waveform (lead-in silence shifts it), offset the c
 
 ```bash
 npx remotion render Launch out/launch.mp4 --codec=h264
-ffmpeg -i out/launch.mp4   # verify dimensions, fps, duration (no ffprobe on this Mac)
+ffprobe -v error -select_streams v:0 -show_entries stream=width,height,avg_frame_rate,duration -of json out/launch.mp4
 ```
 
 Watch at normal speed. Archive approved render WITH its brief, timing table, cue list.

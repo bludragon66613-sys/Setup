@@ -88,8 +88,8 @@ npx remotion render Launch out/transition.mp4 --frames=90-149 --codec=h264
 # final
 npx remotion render Launch out/launch.mp4 --codec=h264
 
-# metadata (this Mac has no ffprobe)
-ffmpeg -i out/launch.mp4
+# metadata
+ffprobe -v error -show_entries stream=width,height,avg_frame_rate,duration -of json out/launch.mp4
 ```
 
 Gotcha: scene-local vs global frames — local frame 30 in a Sequence starting at global 120 = global 150. Always label which one a number is.
