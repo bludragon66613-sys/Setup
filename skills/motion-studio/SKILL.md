@@ -124,4 +124,65 @@ Each scene declares incoming + outgoing state (position, scale, highlighted fiel
 
 ## Reading-hold math
 
-Count from legibility, not appearance. 8 frames @ 30fps ≈ 0.27s — too short for anything. Read copy aloud at normal playback; extend holds that end before you finish. Check UI labels at phone size.
+Count from legibility, not appearance. 8 frames @ 30fps ≈ 0.27s — too short for anything. Read copy aloud at normal playback; extend holds that end before you finish. Check UI labels at phone size. Type budget: ~0.3s per word, 0.7s minimum; never over a busy picture without a plate; if the picture says it, cut the word.
+
+## Director mode (full-film discipline)
+
+For a complete film (not a single shot), use `templates/DIRECTOR-BRIEF.md` — fill-in brief schema with four modes (showreel / product / launch-story / explainer), composition cadence numbers, and the 8-step gated workflow. Blank line = decide yourself, log choice + reason in brief.md. Brief wins over these defaults; named kit wins over brief gaps.
+
+### Facts discipline
+
+`facts.json` before anything: every on-screen or voiced claim → exact source sentence + URL. Nothing invented — no fake testimonials, ratings, prices, results, real people. Generated imagery goes on screen only if brief allows, labelled as concept.
+
+### Audio-first timing
+
+Audio comes first; picture is cut to it.
+- Detect beats → write `timing.json`: beats, the drop, voice in/out frames, key actions snapped to beats. ALL animation timing reads from it.
+- Music matches energy, sits low. Never name a brand/artist in a music prompt. Trim/offset the track rather than bend the picture.
+- SFX only for real on-screen events: one soft whoosh per scene change; clicks/impacts on real actions, each in its own frequency range just above the music.
+- Voices: audition two per character, two takes per line. Duck music under dialogue.
+- Mix ~−14 LUFS, true peak ≤ −1 dBTP. Export a music-only version.
+
+### Craft rules (judge every shot against these)
+
+1. Frame one is a finished picture that works as a still on a busy feed; hook lands in the first second.
+2. One object/shape/word carries the film — lands on the same pixels on both sides of every handoff.
+3. Transitions are made of content: the front thing moves to camera, wipes, or unfolds into the next scene. Hard cuts only when size+direction+subject match, and only on a beat.
+4. One lead movement with overlapping secondaries. Nothing starts/stops all at once.
+5. Speed always changes: arrive slow enough to read, leave fast. No linear easing. Anticipation, follow-through, squash & stretch, springs, arcs.
+6. Every action has a visible result.
+7. Type is motion, not captions: it enters, masks, reveals.
+8. Vary scale and layout: macro, wide, overhead, full-frame type. Never repeat a layout.
+9. Holds breathe with micro-motion; nothing freezes. Camera moves motivated; motion blur on fast ones.
+10. 3D only where it explains something spatial: product-shoot lighting, camera at 35–55°, real materials, labels as HTML tracked from the scene.
+11. Every effect earns its place. No decorative particles, generic gradients, stock glitches.
+
+### Asset rules
+
+- Capture the real product at 2×; take the logo as SVG from source. NEVER redraw a logo.
+- Never show a raw screenshot as a static slab — rebuild panels/icons/text as live HTML/SVG so each part can move.
+- References are for study: frame-difference pass + dense contact sheets → extract principles. Never copy footage, layouts, or music.
+
+### Build rules
+
+- Everything code on one timeline, pinned local fonts/assets, rendered frame-by-frame, encoded with ffmpeg. API keys in env vars.
+- Render a 3–5s test end-to-end BEFORE real work.
+- Every value a function of frame number. No timers, no unseeded randomness.
+- Shared tokens, eases, handoff positions first; each scene its own component; builders run in parallel.
+- Recompose per format rather than crop; keep 9:16 content out of platform UI zones.
+
+### Critic loop (builder never judges own work)
+
+After storyboard, each scene, and each full render: FRESH critic subagent that saw none of the building pulls its own frames (every 0.2s, dense around transitions), measures, returns ranked problems with timestamps, ending "ship" or "one more pass". Every full render also gets:
+- **Sound-off read**: critic sees only a silent 2fps contact sheet, retells the story.
+- **Sync check**: every hit/line within 1 frame of timing.json.
+- **Fact check**: every word traced to facts.json.
+- **Director's review**: brutal critique of what feels assembled, slow, or generic.
+
+Fix the biggest problem first, re-render, new critic rechecks every earlier item. Log each round in `ledger.md` with before/after numbers.
+
+### Quality bar (measured, then judged)
+
+Measured: exact duration/size/fps · frame one finished · ≤1s frozen per 30s, no still >0.5s · text contrast ≥4.5:1, no collisions, inside safe margins · brand colours match in render · cuts and hits within 1 frame of beat · ~−14 LUFS, no clipping, effects below music and voice · understood with sound off · every claim in facts.json, generated content labelled.
+
+Judged: a critic would put it beside the references without it looking weaker. A film with no bugs is not finished — finished means it holds up next to the best work in the genre.
